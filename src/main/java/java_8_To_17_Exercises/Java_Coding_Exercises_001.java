@@ -1,0 +1,94 @@
+package java_8_To_17_Exercises;
+
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Supplier;
+
+public class Java_Coding_Exercises_001 {
+
+    public static void main(String[] args){
+
+        List<String> stringList = Arrays.asList(
+                "Sachin", "Shewag", "Gambhir", "Virat", "", "Yuvraj", null, "Dhoni", "Raina"
+        );
+
+        List<Integer> integerList = Arrays.asList(10, 44, 18, 12, 7, 3);
+
+        //Use lambda with forEach to print a list of strings with "Hello " prefix
+        stringList.forEach(s->{
+            if(s!=null && !s.isBlank()) {
+                System.out.println("Hello " + s);
+            }
+        });
+
+        //Sort a list of integers in descending order using lambda Comparator.
+        List<Integer> integerListDesc = integerList.stream()
+                .filter(Objects::nonNull)
+                .sorted((a,b)-> b.compareTo(a))
+                .toList();
+        System.out.println("Sort a list of integers in descending order using lambda Comparator : "+integerListDesc);
+
+        //Filter even numbers from a list using Predicate and lambda.
+        List<Integer> evenIntegerList = integerList.stream()
+                .filter(n->Objects.nonNull(n) && n%2==0)
+                .toList();
+
+        System.out.println("Filter even numbers from a list using Predicate and lambda : "+evenIntegerList);
+
+        //Use Consumer to print each element of a list with uppercase.
+        //NOTE : map is the FUNCTION, forEach is the Consumer
+        System.out.println("Use Consumer to print each element of a list with uppercase :");
+        stringList.forEach(s->{
+            if(Objects.nonNull(s) && !s.isBlank()){
+                System.out.println(s.toUpperCase());
+            }
+        });
+
+        //Create a Supplier that generates random numbers (2–100)
+        Random random = new Random();
+        Supplier<Integer> supplier = () -> random.nextInt(100-2+1)+2;
+        //NOTE : formula is random.nextInt(max-min+1)+min
+
+        //If Interviewer wants modern way random.ints
+        Supplier<Integer> supplier1 = () -> random.ints(2, 101).findFirst().orElse(2);
+
+        //Thread-safe version (if interviewer asks about concurrency)Java
+        Supplier<Integer> supplier2 = ()-> ThreadLocalRandom.current().nextInt(2, 101);
+
+        System.out.println("Supplier that generated random numbers (2–100), random number : "+supplier.get());
+        System.out.println("Supplier that generated random numbers (2–100), random number : "+supplier1.get());
+        System.out.println("Supplier that generated random numbers (2–100), random number : "+supplier2.get());
+
+        //Use Function to convert a list of strings to uppercase
+        //NOTE : map is a FUNCTION, forEach is a CONSUMER
+        List<String> upperCaseStringList = stringList.stream()
+                .filter(Objects::nonNull)
+                .filter(s->!s.isBlank())
+                .map(String::toUpperCase)
+                .toList(); // Use collect(Collectors.toList()) if Java 8-15 compatibility needed
+
+        System.out.println("Use Function to convert a list of strings to uppercase : "+upperCaseStringList);
+
+        //Chain Function: Convert string to uppercase, then to length.
+        List<Integer> lengthOfStringsInStringList = stringList.stream()
+                .filter(s->s!=null && !s.isBlank())
+                .map(s-> s.toUpperCase().length())
+                .toList();
+        System.out.println("Chain Function: Convert string to uppercase, then to length : "+lengthOfStringsInStringList);
+
+        //Use Predicate to filter names starting with "S" from a list
+        List<String> stringStartsWithS = stringList.stream()
+                .filter(s->Objects.nonNull(s) && !s.isBlank() && s.startsWith("S"))
+                .toList();
+        System.out.println("Use Predicate to filter names starting with \"S\" from a list : "+stringStartsWithS);
+
+        //Implement a custom functional interface "Calculator" with add and subtract methods using lambda.
+        //NOTE : Functional Interface is also known as Single Abstract Method (SAM) interface
+        Calculator add = Integer::sum; // We can use (a,b) -> a+b as well
+        Calculator subtract = (a,b) -> a-b;
+
+        System.out.println("Using custom functional Interface Calculator, addition of 6,4 is "+add.calc(6,4));
+        System.out.println("Using custom functional Interface Calculator, subtraction of 6,4 is "+subtract.calc(6,4));
+
+    }
+}
