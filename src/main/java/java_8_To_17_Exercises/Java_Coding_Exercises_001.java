@@ -3,6 +3,7 @@ package java_8_To_17_Exercises;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class Java_Coding_Exercises_001 {
 
@@ -138,9 +139,33 @@ public class Java_Coding_Exercises_001 {
                 .toList();
         System.out.println("Sort a list of employees by salary descending : "+employeeListSortedBySalaryDesc);
 
+        //Group a list of strings by length descending using Collectors.groupingBy with lambda
+        Map<Integer, List<String>> stringListGroupingByLengthDesc = stringList.stream()
+                .filter(s-> s!=null && !s.isBlank())
+                //.map(s -> s.length())
+                //.sorted(Comparator.reverseOrder())
+                .collect(Collectors.groupingBy(
+                        String::length,
+                        ()->new TreeMap<>((a,b)->b.compareTo(a)),
+                        Collectors.toList()
+                ));
 
+        System.out.println("Group a list of strings by length descending using Collectors.groupingBy with lambda : "+stringListGroupingByLengthDesc);
 
+        //Group a list of strings by length ascending using Collectors.groupingBy with lambda
+        Map<Integer, List<String>> stringListGroupingByLengthAsc = stringList.stream()
+                .filter(s-> Objects.nonNull(s) && !s.isBlank())
+                //.map(s -> s.length())
+                //.sorted(Comparator.naturalOrder())
+                .collect(Collectors.groupingBy(
+                            String::length,
+                            TreeMap::new, //Equivalent to () -> new TreeMap<>()
+                            Collectors.toList()
+                            ));
 
+        System.out.println("Group a list of strings by length ascending using Collectors.groupingBy with lambda : "+stringListGroupingByLengthAsc);
+
+        //Use Optional with lambda: If value present, print it; else print default
 
 
     }
