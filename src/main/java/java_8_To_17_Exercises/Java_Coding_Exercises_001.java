@@ -1,7 +1,10 @@
 package java_8_To_17_Exercises;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -14,6 +17,9 @@ public class Java_Coding_Exercises_001 {
         );
 
         List<Integer> integerList = Arrays.asList(10, 44, 18, 12, 7, 3);
+
+        String nonNullValueString = "Funkynshot";
+        String nullValueString = null;
 
         //Use lambda with forEach to print a list of strings with "Hello " prefix
         stringList.forEach(s -> {
@@ -166,6 +172,74 @@ public class Java_Coding_Exercises_001 {
         System.out.println("Group a list of strings by length ascending using Collectors.groupingBy with lambda : "+stringListGroupingByLengthAsc);
 
         //Use Optional with lambda: If value present, print it; else print default
+        Optional<String> optionalWithNonNullValueString = Optional.ofNullable(nonNullValueString);
+        Optional<String> optionalWithNullValueString = Optional.ofNullable(nullValueString);
+
+        //Case 1: If value is present
+        optionalWithNonNullValueString.ifPresentOrElse(
+                (value)->System.out.println(value), // Can use System.out::println instead
+                () -> System.out.println("default")
+        );
+
+        //Case 2: If value is not present
+        optionalWithNullValueString.ifPresentOrElse(
+                System.out::println,
+                ()->System.out.println("default")
+        );
+
+        //Use Optional with lambda: If value present, print it; else print default, NOTE : Don't use ifPresentOrElse
+        //Case 1: Value is present
+        System.out.println(optionalWithNonNullValueString.orElse("default"));
+        //Case 2: Value is not present
+        System.out.println(optionalWithNullValueString.orElse("default"));
+
+        //Create a Predicate that checks if a number is prime (using lambda)
+        //Prime number is a number which is divided by 1 and itself
+        //1 is not a prime number by the prime number rule
+        //2 is the only even prime number
+        //Numbers divided by 2 are not the prime numbers
+        Predicate<Integer> isPrime = n -> {
+            if(n<2)
+                return false;
+            if(n==2)
+                return true;
+            if(n%2==0)
+                return false;
+            for(int i=3; i<=Math.sqrt(n); i=i+2){
+                if(n%i == 0)
+                    return false;
+            }
+            return true;
+        };
+
+        System.out.println("Is 1 prime number ? "+isPrime.test(1));
+        System.out.println("Is 2 prime number ? "+isPrime.test(2));
+        System.out.println("Is 3 prime number ? "+isPrime.test(3));
+        System.out.println("Is 8 prime number ? "+isPrime.test(8));
+        System.out.println("Is 33 prime number ? "+isPrime.test(33));
+
+        //Use lambda with Stream: Filter names starting with "S", map to uppercase, collect to list.
+        List<String> upperCaseStringList1 = stringList.stream()
+                .filter(s->s!=null && !s.isBlank() && s.startsWith("S"))
+                .map(String::toUpperCase)
+                .toList();
+
+        System.out.println("Use lambda with Stream: Filter names starting with \"S\", map to uppercase, collect to list : "+upperCaseStringList1);
+
+        //Implement a method reference for static method (e.g., String::toUpperCase, Integer::parseInt, Math::abs)
+        Function<String, String> toUpperCase = String::toUpperCase;
+        Function<String, Integer> parseInt = Integer::parseInt;
+        Function<Integer, Integer> mathAbs = Math::abs;
+
+        System.out.println("Method Reference using Function, toUpperCase(\"Funkynshot\") "+toUpperCase.apply("Funkynshot")); //Output: FUNKYNSHOT
+        System.out.println("Method Reference using Function, parseInt(\"500\") "+parseInt.apply("500")); //Output: 500
+        System.out.println("Method Reference using Function, mathAbs(-12) "+mathAbs.apply(-12)); //Output: 12
+
+
+
+
+
+
 
 
     }
