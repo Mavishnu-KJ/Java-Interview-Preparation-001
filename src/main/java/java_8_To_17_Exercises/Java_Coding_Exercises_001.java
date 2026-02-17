@@ -21,6 +21,7 @@ public class Java_Coding_Exercises_001 {
         );
 
         List<Integer> integerList = Arrays.asList(10, 44, 18, 12, 7, 3);
+        List<Integer> emptyList = List.of();
 
         String nonNullValueString = "Funkynshot";
         String nullValueString = null;
@@ -339,6 +340,92 @@ public class Java_Coding_Exercises_001 {
                 .toList();
 
         System.out.println("Sort descending using sorted, integerListSortedDesc is "+integerListSortedDesc);
+
+        //Count elements in list using count
+        long numberOfElementsInStringList = stringList.stream()
+                //.filter(Objects::nonNull)
+                .count();
+
+        System.out.print("number of elements in stringList is : "+numberOfElementsInStringList);
+
+        //Find first element using findFirst (or Optional).
+        String firstElement = stringList.stream()
+                .filter(s->s!=null && !s.isBlank())
+                .findFirst()
+                .orElse(null);
+
+        System.out.println("Find first element using findFirst (or Optional), firstElement is "+firstElement);
+
+        //Check if any number is even using anyMatch
+        boolean isIntegerListHasEven = integerList.stream()
+                .filter(Objects::nonNull)
+                .anyMatch(n->n%2==0);
+
+        System.out.println("integerList "+integerList+" has even number ? "+isIntegerListHasEven);
+
+        //Using anyMatch with emptyList
+        boolean isEmptyListHasEven = emptyList.stream()
+                .filter(Objects::nonNull)
+                .anyMatch(n->n%2==0);
+
+        System.out.println("emptyList "+emptyList+" has even number ? "+isEmptyListHasEven);
+
+        //Check if all numbers are positive using allMatch
+        boolean isAllNumbersInIntegerListPositive = integerList.stream()
+                .filter(Objects::nonNull)
+                .allMatch(n->n>0);
+
+        System.out.println("integerList "+integerList+" has all numbers positive ? "+isAllNumbersInIntegerListPositive);
+
+        //Check if no number is negative using noneMatch.
+        boolean isNoNegativeNumberInIntegerList = integerList.stream()
+                .filter(Objects::nonNull)
+                .noneMatch(n->n<0);
+
+        System.out.println("integerList "+integerList+" has no negative numbers ? "+isNoNegativeNumberInIntegerList);
+
+        //Reduce to sum of list using reduce
+
+        //Method 1 : Using orElse
+        Integer sumOfIntegersInTheIntegerList = integerList.stream()
+                .filter(Objects::nonNull)
+                .reduce((a,b)->a+b)// We can use Integer::sum instead
+                .orElse(null);
+        System.out.println("Reduce to sum of list using reduce, using Optional, sumOfIntegersInTheIntegerList is "+sumOfIntegersInTheIntegerList);
+
+        //Method 2 : Using Optional<Integer>
+        Optional<Integer> sumOfIntegersInTheEmptyList = emptyList.stream()
+                .filter(Objects::nonNull)
+                .reduce(Integer::sum); // It will return Optional.empty if the list is empty
+        System.out.println("Reduce to sum of list using reduce, using Optional, sumOfIntegersInTheEmptyList is "+sumOfIntegersInTheEmptyList);
+
+        //Method 3 : Use int instead of Integer
+        int sumOfIntegersInTheIntegerList1 = integerList.stream()
+                .filter(Objects::nonNull)
+                .mapToInt(Integer::intValue)
+                //.reduce(0,Integer::sum);
+                .sum();
+
+        System.out.println("Reduce to sum of list using int instead of Integer, sumOfIntegersInTheIntegerList1 is "+sumOfIntegersInTheIntegerList1);
+
+        /* NOTE : prefer using int instead of Integer, reduce(0, Integer::sum) instead of reduce(Integer:;sum) if not Optional
+            reduce(Integer::sum) will give Optional.empty incase of the list is empty
+            reduce(0, Integer::sum) will give 0 in case of the list is empty - This is the expected output,
+            So, prefer reduce(0, Integer::sum) over reduce(Integer::sum)
+         */
+
+        //Reduce to product of list using reduce
+        long productOfIntegersInTheIntegerList = integerList.stream()
+                .filter(Objects::nonNull)
+                .mapToLong(Integer::longValue)
+                .reduce(1L, (a,b)->a*b); // We can use Integer::multiplyExact instead
+
+        //NOTE : We can use Math::multiplyExact to throw ArithmeticException on overflow, RECOMMENDED
+
+        System.out.println("Reduce to product of list using reduce, productOfIntegersInTheIntegerList is "+productOfIntegersInTheIntegerList);
+
+
+
 
 
     }
