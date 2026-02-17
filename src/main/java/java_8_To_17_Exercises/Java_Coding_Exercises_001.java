@@ -485,6 +485,89 @@ public class Java_Coding_Exercises_001 {
 
         System.out.println("Group strings by length using Collectors.groupingBy, groupingStringsByLength is "+groupingStringsByLength);
 
+        //Partition numbers into even/odd using Collectors.partitioningBy.
+        Map<Boolean, List<Integer>> partitionedByEvenOdd = integerList.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.partitioningBy(
+                   n->n%2==0
+                ));
+
+        System.out.println("Partition numbers into even/odd using Collectors.partitioningBy, partitionedByEvenOdd is "+partitionedByEvenOdd);
+        System.out.println("integerList : "+integerList+", Evens : "+partitionedByEvenOdd.get(true));
+        System.out.println("integerList : "+integerList+", Odds : "+partitionedByEvenOdd.get(false));
+
+        //Using Collectors.counting with Collectors.partitioningBy
+        Map<Boolean, Long> partitionedByEvenOddCount = integerList.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.partitioningBy(
+                        n->n%2==0,
+                        Collectors.counting()
+                ));
+
+        System.out.println("integerList : "+integerList+", partitionedByEvenOddCount : "+partitionedByEvenOddCount);
+
+        //Join strings with comma using Collectors.joining(", ").
+        String joinedStringWithDelimeter = stringList.stream()
+                .filter(s->s!=null && !s.isBlank())
+                .collect(Collectors.joining(", "));
+
+        System.out.println("Joining Strings with comma using Collectors.joining : "+joinedStringWithDelimeter);
+
+        //Join strings by using Collectors.joining, with delimeter ", ", Prefix "[", Suffix "]"
+        String joinedStringWithDelimeterPrefixSuffix = stringList.stream()
+                .filter(s->s!=null && !s.isBlank())
+                .collect(Collectors.joining(", ", "[", "]"));
+
+        System.out.println("Joining Strings by using Collectors.joining, with delimeter , Prefix , Suffix  : "+joinedStringWithDelimeterPrefixSuffix);
+
+        //Find max/min in list using max/min + Comparator.
+        //Case 1 : Find max in list
+        Integer maxInIntegerList = integerList.stream()
+                .filter(Objects::nonNull)
+                .max(Comparator.naturalOrder())
+                .orElseThrow(()->new IllegalStateException("List is empty"));
+
+        System.out.println("integerList "+integerList+", max: "+maxInIntegerList);
+
+        //Case 2 : Fin min in List
+        Optional<Integer> minInIntegerList = integerList.stream()
+                .filter(Objects::nonNull)
+                .min(Comparator.naturalOrder());
+
+        minInIntegerList.ifPresentOrElse(
+                value -> System.out.println("integerList " + integerList + ", min: " +value),
+                ()->System.out.println("List is empty")
+        );
+
+        //Reduce to sum of integers in list.
+        long sumOfIntegersInIntegerList = integerList.stream()
+                .filter(Objects::nonNull)
+                .mapToLong(Integer::longValue)
+                .reduce(0L, Long::sum);
+
+        System.out.println("integerList : "+integerList+", sumOfIntegersInIntegerList : "+sumOfIntegersInIntegerList);
+
+        //Reduce to product of integers
+        long productOfIntegersInIntegerList = integerList.stream()
+                .filter(Objects::nonNull)
+                .mapToLong(Integer::longValue)
+                .reduce(1L, Math::multiplyExact);
+
+        System.out.println("integerList : "+integerList+", productOfIntegersInIntegerList : "+productOfIntegersInIntegerList);
+
+        //With overflow handling (if interviewer asks "what if product overflows?"):
+        long productSafe;
+        try {
+            productSafe = integerList.stream()
+                    .filter(Objects::nonNull)
+                    .mapToLong(Integer::longValue)
+                    .reduce(1L, Math::multiplyExact);
+        } catch (ArithmeticException e) {
+            productSafe = Long.MAX_VALUE;  // or handle as needed
+            System.out.println("Overflow detected: " + e.getMessage());
+        }
+
+
 
 
     }
