@@ -3,6 +3,8 @@ package java_8_To_17_Exercises;
 import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiFunction;
@@ -24,6 +26,20 @@ public class Java_Coding_Exercises_001 {
         List<String> stringListWithDuplicates = Arrays.asList(
             "Sachin Tendulkar", "Virat Kohli", "Dhoni", "Raina", null, "", "Jadeja", "   ", "Dhoni", "Raina"
         );
+
+        List<List<String>> nestedStringList = List.of(
+                Arrays.asList("Alpha", "Beta", "Gamma"),
+                Arrays.asList("Delta, Sigma")
+        );
+
+        List<Optional<String>> optionalStringlist = Arrays.asList(
+                  Optional.of("Alpha"),
+                  Optional.empty(),
+                  Optional.of("Beta"),
+                  Optional.of("Gamma")
+          );
+
+        //System.out.println("nestedStringList is "+nestedStringList);
 
         List<Integer> integerList = Arrays.asList(10, 44, 18, 12, 7, 3);
         List<Integer> emptyList = List.of();
@@ -567,7 +583,68 @@ public class Java_Coding_Exercises_001 {
             System.out.println("Overflow detected: " + e.getMessage());
         }
 
+        //Reduce to concatenate strings with delimiter.
+        String concatenatedStringWithDelimter = stringList.stream()
+                .filter(s->s!=null && !s.isBlank())
+                .reduce("", (a,b) -> a.isEmpty()? b : a +", "+b);
 
+        System.out.println("Used reduce to concatenate string with Delimeter : "+concatenatedStringWithDelimter);
+
+        //FlatMap: Flatten List<List<String>> to List<String>.
+        List<String> flattenedStringList = nestedStringList.stream()
+                .filter(Objects::nonNull)
+                .flatMap(innerList->innerList==null?Stream.empty():innerList.stream())
+                .toList();
+
+        System.out.println("nestedStringList "+nestedStringList+" flattened to "+flattenedStringList);
+
+        //FlatMap: Flatten List<Optional<String>> to List<String>.
+        List<String> flattenedOptionalStringList = optionalStringlist.stream()
+                .filter(Objects::nonNull) //Even Optional can be null, but very rare
+                //.flatMap(innerOptional -> innerOptional.isPresent() ? innerOptional.stream() : Stream.empty())
+                .flatMap(Optional::stream) //We can simply use Optional::stream instead
+                .toList();
+
+        System.out.println("nestedOptionalStringlist "+optionalStringlist+" flattened to "+flattenedOptionalStringList);
+
+        //Java 8 compatible (if interviewer specifies older Java)
+        List<String> flattenedOptionalStringList1 = optionalStringlist.stream()
+                .filter(Objects::nonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .toList();
+
+        System.out.println("nestedOptionalStringlist "+optionalStringlist+" flattened to "+flattenedOptionalStringList1);
+
+        //Generate even numbers sequence using Stream.iterate + limit.
+        List<Integer> evenNumbers = Stream.iterate(0, n->n+2)
+                .limit(20) //NOTE : limit is required for infinite streams, else program will hang, eventually run out of memory
+                .toList();
+
+        System.out.println("Generate even numbers sequence using Stream.iterate + limit, evenNumbers : "+evenNumbers);
+
+        //Generate 10 random numbers using Stream.generate + limit
+        List<Integer> randomNumbers = Stream.generate(()->new Random().nextInt(1, 51)) //1 to 50 inclusive (bound is exclusive)
+                .limit(10) //As they asked 10 random numbers only
+                .toList();
+
+        System.out.println("Generate 10 random numbers using Stream.generate + limit, randomNumbers : "+randomNumbers);
+
+        //Create LocalDate for today and print.
+        LocalDate today = LocalDate.now();
+        System.out.println("today date : "+today);
+
+        //Add 10 days to today's date using plusDays
+        LocalDate todayPlus10Days = today.plusDays(10);
+        System.out.println("10 days added to today's date : "+todayPlus10Days);
+
+        //Calculate age from birth date using Period.between.
+        Period age = Period.between(
+                LocalDate.of(1990, 5, 15),
+                LocalDate.of(2026, 1, 31)
+        );
+
+        System.out.println("Calculated age using Period.between, Age  Years :"+age.getYears()+" Months :"+age.getMonths()+" Days :"+age.getDays());
 
 
     }

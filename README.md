@@ -1,4 +1,4 @@
-##Coding practice for the following Java 8-17 exercise questions 
+**Coding practice for the following Java 8-17 exercise questions** 
 
 001. Use lambda with forEach to print a list of strings with "Hello " prefix.
 002. Sort a list of integers in descending order using lambda Comparator.
