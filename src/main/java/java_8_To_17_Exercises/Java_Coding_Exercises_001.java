@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Java_Coding_Exercises_001 {
 
@@ -20,8 +21,18 @@ public class Java_Coding_Exercises_001 {
                 "Sachin", "Shewag", "Gambhir", "Virat", "", "Yuvraj", null, "Dhoni", "Raina"
         );
 
+        List<String> stringListWithDuplicates = Arrays.asList(
+            "Sachin Tendulkar", "Virat Kohli", "Dhoni", "Raina", null, "", "Jadeja", "   ", "Dhoni", "Raina"
+        );
+
         List<Integer> integerList = Arrays.asList(10, 44, 18, 12, 7, 3);
         List<Integer> emptyList = List.of();
+
+        List<List<Integer>> nestedIntegerList = List.of(
+                Arrays.asList(1, 3, 5, 7),
+                Arrays.asList(2, 4, 6, 8)
+        );
+        //System.out.println("nestedIntegerList is "+nestedIntegerList);
 
         String nonNullValueString = "Funkynshot";
         String nullValueString = null;
@@ -424,8 +435,44 @@ public class Java_Coding_Exercises_001 {
 
         System.out.println("Reduce to product of list using reduce, productOfIntegersInTheIntegerList is "+productOfIntegersInTheIntegerList);
 
+        //FlatMap: Flatten List<List<Integer>> to List<Integer>
+        List<Integer> flattenedList = nestedIntegerList.stream()
+                .filter(Objects::nonNull)
+                //.flatMap(innerList->innerList.stream()) //For each inner List<Integer>, it calls .stream() → returns Stream<Integer>
+                .flatMap(innerList->innerList==null?Stream.empty():innerList.stream())
+                //.flatMap(List::stream) // We can use List::stream instead but only if innerList is not null
+                .toList();
 
+        System.out.println("Flattened the nestedIntegerList "+nestedIntegerList+ " to "+flattenedList);
 
+        //Remove duplicates using distinct.
+        List<String> stringListWithoutDuplicates = stringListWithDuplicates.stream()
+                .filter(s->s!=null && !s.isBlank())
+                .distinct()
+                .toList();
+
+        System.out.println("Removed duplicates using distinct, stringListWithoutDuplicates is "+stringListWithoutDuplicates);
+
+        /* NOTE : If interviewer asks "does distinct remove based on equals?"
+        Answer: "Yes — distinct() uses Object.equals() and hashCode().
+        For custom objects, override them if needed."
+         */
+
+        //Limit to first 5 elements
+        List<Integer> first5ElementsInIntegerList = integerList.stream()
+                .filter(Objects::nonNull)
+                .limit(5)
+                .toList();
+
+        System.out.println("Limit to first 5 elements, first5ElementsInIntegerList is "+first5ElementsInIntegerList);
+
+        //Skip first 3 elements
+        List<Integer> skippedFirst3ElementsInIntegerList = integerList.stream()
+                .filter(Objects::nonNull)
+                .skip(3) //skip first 3 elements
+                .toList();
+
+        System.out.print("Skipped first 3 elements , skippedFirst3ElementsInIntegerList is "+skippedFirst3ElementsInIntegerList);
 
 
     }
