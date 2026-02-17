@@ -474,6 +474,18 @@ public class Java_Coding_Exercises_001 {
 
         System.out.print("Skipped first 3 elements , skippedFirst3ElementsInIntegerList is "+skippedFirst3ElementsInIntegerList);
 
+        //Group strings by length using Collectors.groupingBy.
+        Map<Integer, List<String>> groupingStringsByLength = stringList.stream()
+                .filter(s-> Objects.nonNull(s) && !s.isBlank())
+                .collect(Collectors.groupingBy(
+                   String::length,
+                   ()->new TreeMap<>(), //NOTE : use Linked LinkedHashMap::new to preserve insertion order
+                   Collectors.toList()
+                ));
+
+        System.out.println("Group strings by length using Collectors.groupingBy, groupingStringsByLength is "+groupingStringsByLength);
+
+
 
     }
 
