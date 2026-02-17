@@ -235,7 +235,19 @@ public class Java_Coding_Exercises_001 {
         System.out.println("Method Reference using Function, parseInt(\"500\") "+parseInt.apply("500")); //Output: 500
         System.out.println("Method Reference using Function, mathAbs(-12) "+mathAbs.apply(-12)); //Output: 12
 
+        //Use constructor reference to create a new ArrayList.
+        Supplier<ArrayList<Integer>> arrayListSupplier = ArrayList::new ;
 
+        ArrayList<Integer> arrayList1FromSupplier = arrayListSupplier.get();
+        arrayList1FromSupplier.add(10);
+        arrayList1FromSupplier.add(7);
+
+        ArrayList<Integer> arrayList2FromSupplier = arrayListSupplier.get();
+        arrayList2FromSupplier.add(18);
+        arrayList2FromSupplier.add(1);
+
+        System.out.println("Using constructor reference, created arrayList arrayList1FromSupplier is "+arrayList1FromSupplier);
+        System.out.println("Using constructor reference, created arrayList arrayList2FromSupplier is "+arrayList2FromSupplier);
 
 
 
