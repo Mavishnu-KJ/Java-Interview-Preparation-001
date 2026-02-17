@@ -1,11 +1,15 @@
 package java_8_To_17_Exercises;
 
 import javax.swing.text.html.Option;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class Java_Coding_Exercises_001 {
@@ -249,9 +253,92 @@ public class Java_Coding_Exercises_001 {
         System.out.println("Using constructor reference, created arrayList arrayList1FromSupplier is "+arrayList1FromSupplier);
         System.out.println("Using constructor reference, created arrayList arrayList2FromSupplier is "+arrayList2FromSupplier);
 
+        //Handle checked exception in lambda (wrap in try-catch or custom functional interface).
+
+        //1. Wrap in try-catch
+        //NOTE : NullPointerException, RunTimeException are unchecked exceptions
+        //NOTE : IOException, ParseException are checked exceptions
+        System.out.println("\nHandling checked exception in lambda by wrap in try-catch : ");
+        stringList.forEach(s->{
+                if(s!=null && !s.isBlank()){
+                    try {
+                        if (s.startsWith("S")) {
+                            throw new IOException("String starts with S");
+                        }
+                        System.out.println(s);
+                    }catch(IOException e){
+                        System.out.println("Caught checked exception : "+e.getMessage());
+                    }
+                }
+            }
+        );
+
+        //Using custom functional interface
+        System.out.println("\nHandling checked exception in lambda using custom functional interface : ");
+        ThrowIOException<String> throwIOExceptionInterface = (s)->{
+                if (s.startsWith("S")) {
+                    throw new IOException("String starts with S");
+                }
+        };
+
+        stringList.forEach(s->{
+                    if(s!=null && !s.isBlank()){
+                        try {
+                            throwIOExceptionInterface.throwIOException(s);
+                            System.out.println(s);
+                        }catch (IOException e){
+                            System.out.println("Caught checked exception : "+e.getMessage());
+                        }
+                    }
+                }
+        );
 
 
+        //Use BiFunction to add two numbers with lambda
+        BiFunction<Integer, Integer, Integer> additionUsingBiFunction = (a,b) -> a+b; //We can use Integer::sum instead
+        System.out.println("Addition of 6, 4 using BiFunction, additionUsingBiFunction.apply(6,4) is "+additionUsingBiFunction.apply(6,4));
 
+        //Combine Predicate and Consumer: Filter and print only matching elements.
+        System.out.println("Combined Predicate and Consumer, Printing only the matching elements :");
+        stringList.stream()
+                .filter(s->s!=null && !s.isBlank() && s.startsWith("S")) //Predicate
+                .forEach(System.out::println); //Consumer
+
+        //Create Stream from list and print all elements using forEach
+        System.out.println("Created stream from list and printing all elements using forEach : ");
+        integerList.stream()
+                .filter(Objects::nonNull)
+                .forEach(System.out::println);
+
+        //Filter even numbers from list and print using forEach
+        System.out.println("Even numbers from integerList : ");
+        integerList.stream()
+                .filter(n->Objects.nonNull(n) && n%2 ==0)
+                .forEach(System.out::println);
+
+        //Map list of strings to uppercase and collect to List
+        List<String> upperCaseStringList2 = stringList.stream()
+                .filter(s-> Objects.nonNull(s) && !s.isBlank())
+                .map(String::toUpperCase)
+                .toList();
+
+        System.out.println("Map list of strings to uppercase and collect to List, upperCaseStringList2 is "+upperCaseStringList2);
+
+        //Sort list of integers ascending using sorted
+        List<Integer> integerListSortedAsc = integerList.stream()
+                .filter(Objects::nonNull)
+                .sorted(Comparator.naturalOrder()) // We can use just sorted() instead for ascending order
+                .toList();
+
+        System.out.println("Sort list of integers ascending using sorted, integerListSortedAsc is "+integerListSortedAsc);
+
+        //Sort descending using sorted(Comparator.reverseOrder()).
+        List<Integer> integerListSortedDesc = integerList.stream()
+                .filter(Objects::nonNull)
+                .sorted(Comparator.reverseOrder())
+                .toList();
+
+        System.out.println("Sort descending using sorted, integerListSortedDesc is "+integerListSortedDesc);
 
 
     }
