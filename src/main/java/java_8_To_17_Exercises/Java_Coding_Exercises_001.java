@@ -3,8 +3,8 @@ package java_8_To_17_Exercises;
 import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.time.LocalDate;
-import java.time.Period;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiFunction;
@@ -52,6 +52,36 @@ public class Java_Coding_Exercises_001 {
 
         String nonNullValueString = "Funkynshot";
         String nullValueString = null;
+
+        List<LocalDate> localDateList = Arrays.asList(
+                LocalDate.of(2026,1,1),
+                LocalDate.of(2026,12,12),
+                LocalDate.of(2026,3,3),
+                LocalDate.of(2026,10,10),
+                LocalDate.of(2026,2,2),
+                null,
+                LocalDate.now(),
+                LocalDate.of(2026,1,5),
+                LocalDate.of(2026,1,3),
+                LocalDate.of(2026,1,4),
+                LocalDate.of(2026,2,3)
+        );
+
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        String multiLinesText = """
+                Sachin Tendulkar 
+                Dhoni
+                Virat Kohli 
+                
+                Jadeja
+                Raina
+                
+                KL Rahul
+                
+                """;
+
+        String testStringForStrip = "   Hey  see here !! ";
 
         //Use lambda with forEach to print a list of strings with "Hello " prefix
         stringList.forEach(s -> {
@@ -640,12 +670,282 @@ public class Java_Coding_Exercises_001 {
 
         //Calculate age from birth date using Period.between.
         Period age = Period.between(
-                LocalDate.of(1990, 5, 15),
+                LocalDate.of(2000, 5, 15),
                 LocalDate.of(2026, 1, 31)
         );
 
         System.out.println("Calculated age using Period.between, Age  Years :"+age.getYears()+" Months :"+age.getMonths()+" Days :"+age.getDays());
 
+        //Parse string to LocalDateTime using DateTimeFormatter.
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime parsedDateTime = LocalDateTime.parse("2026-02-18 11:40:25", formatter);
+        System.out.println("Parse string to LocalDateTime using DateTimeFormatter, parsedDateTime is " + parsedDateTime);
+
+        //Format LocalDateTime to custom pattern (e.g., "dd-MM-yyyy HH:mm")
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedLocalDateTime = formatter.format(LocalDateTime.now());
+        System.out.println("Format LocalDateTime to custom pattern (e.g., \"dd-MM-yyyy HH:mm\"), formattedLocalDateTime is " + formattedLocalDateTime);
+
+        //Get current time in different time zones (ZoneId.of("Asia/Kolkata"), "America/New_York").
+        ZonedDateTime asiaZonedDateTime = ZonedDateTime.now(ZoneId.of("Asia/Kolkata"));
+        ZonedDateTime americaZonedDateTime = ZonedDateTime.now(ZoneId.of("America/New_York"));
+
+        System.out.println("Current time with time zone Asia/Kolkata : " + asiaZonedDateTime);
+        System.out.println("Current time with time zone America/New_York : " + americaZonedDateTime);
+
+        //Convert old Date to LocalDateTime
+        Date legacyDate = new Date(); //Old Date means legacy date (ie legacy java.util package, modern datetimeapi java.time package)
+        Instant instant = legacyDate.toInstant(); // Converting the legacy date to instant
+        LocalDateTime localDateTimeFromLegacyDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()); // ofInstant with zoneId systemDefault()
+        System.out.println("localDateTimeFromLegacyDate is " + localDateTimeFromLegacyDate);
+
+        //Convert java.time api date to legacy date
+        LocalDateTime ldt = LocalDateTime.now(); // java.time package api date
+        Instant instant1 = ldt.atZone(ZoneId.systemDefault()).toInstant(); //Converting the new api date to instant
+        Date legacyDate1 = Date.from(instant1);
+        System.out.println("Converted legacy date from new api date is legacyDate1" + legacyDate1);
+
+        //Duration between two LocalDateTime.
+        Duration durationBetweenTwoLocalDateTime = Duration.between(
+                LocalDateTime.of(2026, 1, 31, 14, 30),
+                LocalDateTime.of(2026, 1, 31, 16, 30)
+        );
+
+        System.out.println("Duration between local dates, durationBetweenTwoLocalDateTime is " + durationBetweenTwoLocalDateTime);
+
+        //Find max/min date in list of LocalDate
+        //NOTE : max - newest date, min - earliest date
+        //1. max date
+        LocalDate maxDate = localDateList.stream()
+                .filter(Objects::nonNull)
+                .max(Comparator.naturalOrder())
+                //.max((date1, date2)->date1.compareTo(date2)) //This can also be used instead of above
+                //.max(LocalDate::compareTo) //This can also be used instead of above
+                .orElseThrow(()->new IllegalStateException("Date list is empty"));
+
+        System.out.println("max date from localDateList is "+maxDate);
+
+        //2. min date
+        LocalDate minDate = localDateList.stream()
+                .filter(Objects::nonNull)
+                .min(Comparator.naturalOrder())
+                //.min((date1,date2)->date1.compareTo(date2)) //This can also be used instead of above
+                //.min(LocalDate::compareTo) //This can also be used instead of above
+                .orElseThrow(()->new IllegalStateException("Date list is empty"));
+
+        System.out.println("max date from localDateList is "+minDate);
+
+        //Group dates by month using groupingBy
+        Map<Month, List<LocalDate>> localDatesGroupingByMonth = localDateList.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(
+                        LocalDate::getMonth, //Function<LocalDate, Month> //localDate -> localDate.getMonth() can also be used instead
+                        TreeMap::new,
+                        Collectors.toList()
+                ));
+
+        System.out.println("Group dates by month using groupingBy, localDatesGroupingByMonth is "+localDatesGroupingByMonth);
+
+        //Infinite stream of Fibonacci numbers (limit 10) using generate
+        /*
+        NOTE : Fibonacci series formula : F(i) = F(i-1)+F(i-2) (for i>1)
+        F(0) = 0, F(1) = 1
+        0,1,1,2,3,5,8,...
+         */
+
+        Supplier<Long> fibonacciNumberSupplier = new Supplier<Long>() { //Since we are overriding the get method, we should use Anonymous inner class instead of lambda
+
+            private long[] pair = {0, 1};
+
+            @Override
+            public Long get(){
+                long fib = pair[0]; // return current Fibonacci number
+                long next = pair[0] + pair[1]; // calculate next
+                pair[0] = pair[1]; // shift
+                pair[1] = next; // shift
+                return fib;
+            }
+        };
+
+        List<Long> fibonacciSeries = Stream.generate(fibonacciNumberSupplier)
+                .limit(10)
+                .toList();
+
+        System.out.println("Infinite stream of Fibonacci numbers, limit 10, fibonacciSeries : "+fibonacciSeries);
+
+        //Infinite stream of Fibonacci numbers (limit 10) using iterate, avoiding mutation
+        List<Long> fibIterate = Stream.iterate(
+                        new long[]{0, 1}, // seed: [F(n-2), F(n-1)]
+                        pair -> new long[]{pair[1], pair[0] + pair[1]} // next pair: [F(n-1), F(n)]
+                )
+                .map(pair -> pair[0]) // extract the current Fibonacci number
+                .limit(10)
+                .toList();
+
+        System.out.println("Infinite stream of Fibonacci numbers, limit 10, fibIterate : "+fibIterate);
+
+        //Stream of primes (generate + filter + limit).
+        //2,3,5,7,...
+        Supplier<Long> primeNumberSupplier = new Supplier<Long>(){
+            private long n = 0;
+
+            @Override
+            public Long get(){
+
+                n=n+1; //Incremented for next iteration from Stream
+
+                if(n<2){
+                    return null;
+                }else if(n==2){
+                    return n;
+                }else if(n%2==0){
+                    return null;
+                }else{
+                    for(int i=3; i<=Math.sqrt(n); i=i+2){ //We can use i*i<=n instead of i<=Math.sqrt(n)
+                        if(n%i==0){
+                            return null;
+                        }
+                    }
+                }
+                return n;
+            }
+
+        };
+
+        List<Long> primeNumbersList = Stream.generate(primeNumberSupplier)
+                .filter(Objects::nonNull)
+                .limit(10)
+                .toList();
+
+        System.out.println("Stream of primes using Stream.generate() + limit 10, primeNumbersList is "+primeNumbersList);
+
+        //Stream of primes using Stream.iterate
+        List<Long> primeNumbersListUsingIterate = Stream
+                .iterate(2L, n->n+1)
+                .filter(n->{
+                    if(n<2) return false;
+                    if(n==2) return true;
+                    if(n%2==0) return false;
+                    for(int i=3; i*i<=n; i=i+2){
+                        if (n%i==0) return false;
+                    }
+                    return true;
+                })
+                .limit(10)
+                .toList();
+
+        System.out.println("Stream of primes using Stream.iterate() + limit 10, primeNumbersListUsingIterate is "+primeNumbersListUsingIterate);
+
+        //Debug Stream with peek (print intermediate values)
+
+        // Debug Stream with peek: print intermediate values at each step
+        List<Integer> result = numbers.stream()
+                .peek(n -> System.out.println("Original: " + n))                  // Step 1: original numbers
+                .filter(n -> n % 2 == 0)                                          // Keep only even
+                .peek(n -> System.out.println("  After filter (even): " + n))     // Step 2: after filter
+                .map(n -> n * 2)                                                  // Double each even number
+                .peek(n -> System.out.println("    After map (×2): " + n))        // Step 3: after map
+                .limit(4)                                                         // Take only first 4
+                .peek(n -> System.out.println("      After limit: " + n))         // Step 4: after limit
+                .toList();
+
+        System.out.println("\nFinal result: " + result);
+
+        //Use var for List, Map, Stream.
+        var stringsGroupingByLengthDesc = stringList.stream()
+                .filter(s->s!=null && !s.isBlank())
+                .collect(Collectors.groupingBy(
+                        String::length,
+                        ()->new TreeMap<>((a,b)->b.compareTo(a)),
+                        Collectors.toList()
+                ));
+
+        System.out.println("Strings grouped by length desc, used var instead of map, stringsGroupingByLengthDesc is "+stringsGroupingByLengthDesc);
+
+        //var with diamond operator
+        /*
+        var on left + diamond on right (recommended – cleanest)Java
+        var list = new ArrayList<String>();               // infers ArrayList<String>
+        var map  = new HashMap<Integer, String>();        // infers HashMap<Integer, String>
+        var set  = new HashSet<Long>();                   // infers HashSet<Long>
+        var strings = new ArrayList<String>();                  // ArrayList<String>
+        var numbers = new HashSet<Integer>();                   // HashSet<Integer>
+        var map     = new HashMap<String, List<Employee>>();    // HashMap<String, List<Employee>>
+        var queue   = new LinkedList<Long>();                   // LinkedList<Long>
+
+        Invalid / Compilation Error Cases (Because Compiler cannot infer)
+        var list = new ArrayList<>();          // Error: cannot infer type arguments
+        var map  = new HashMap<>();            // Error: diamond needs type on one side
+
+        When to use full type on left:
+        => Legacy code
+        => Very complex generics (e.g., Map<String, List<Map<Integer, String>>>) — var can make it harder to read
+         */
+
+        //var limitations (no initializer).
+        /*
+        NOTE : var (local variable type inference, Java 10+) cannot be used without an initializer on the right side.
+        => The compiler must see an expression on the right to infer the type.
+        => No initializer = no type info → compilation error.
+        => var requires an initializer on the same line — no exceptions.
+        Limitation: No Initializer → Compilation Error :
+        var count;           // Error: cannot infer type for local variable count
+                     // (no initializer for variable)
+
+        var result;          // Error: cannot infer type for local variable result
+
+        var person;          // Error
+
+        count = 10;          // Even assigning later doesn't help
+
+        Error message (typical):
+        error: cannot infer type for local variable count
+        (cannot use 'var' on variable without initializer)
+
+        Other Related Limitations of var (Quick Summary):
+        Limitation,Example,Allowed?,Reason
+        No initializer,var x;,No,Compiler can't infer type
+        Null alone,var x = null;,No,null has no type
+        Lambda alone,"var func = () -> ""hi"";",No,Lambda needs target type
+        Array initializer,"var arr = {1,2,3};",No,Needs new int[]
+        Field / method param,var field;,No,var only for local variables
+        With diamond only,var list = new ArrayList<>();,No,Diamond needs type on one side
+
+         */
+
+        //String.isBlank() on empty/whitespace.
+        long emptyStringsCount = stringListWithDuplicates.stream()
+                .filter(s-> s!=null && s.isEmpty())
+                .count();
+
+        long blankStringsCount = stringListWithDuplicates.stream()
+                .filter(s-> s!=null && s.isBlank())
+                .count();
+
+        System.out.println("stringListWithDuplicates: "+stringListWithDuplicates+", emptyStringsCount: "+emptyStringsCount+", blankStringsCount: "+blankStringsCount);
+
+        //NOTE : From the above example, we know that .empty() considers empty space as value,
+        // .blank() considers empty space as invalid value.
+        // .empty().trim() is equivalent to .blank()
+
+        //String.lines() on multi-line → Stream<String>
+        System.out.println("multiLinesText : \n"+multiLinesText);
+        List<String> linesAsStringList = multiLinesText.lines() // provides Stream<String>
+                .filter(line->!line.isBlank()) //Optional: Removing blank lines
+                .map(String::trim) //Optional: Removing trailing, leading space if any
+                .toList();
+
+        System.out.println("linesAsStringList : "+linesAsStringList);
+
+        //strip(), stripLeading(), stripTrailing().
+        System.out.println("testStringForStrip : \n'"+testStringForStrip+"'");
+        System.out.println("testStringForStrip.strip() : \n'"+testStringForStrip.strip()+"'");
+        System.out.println("testStringForStrip.stripLeading() : \n'"+testStringForStrip.stripLeading()+"'");
+        System.out.println("testStringForStrip.stripTrailing() : \n'"+testStringForStrip.stripTrailing()+"'");
+
+        //String.repeat(5) on "Hello".
+        System.out.println("Hello".repeat(5));
+        //NOTE : System.out.println("Hello".repeat(-1)); // Throws IllegalArgumentException
 
     }
 
