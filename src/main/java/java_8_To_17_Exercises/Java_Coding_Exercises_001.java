@@ -7,6 +7,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -976,11 +979,11 @@ public class Java_Coding_Exercises_001 {
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 //.thenApply(HttpResponse::body), if we use like this, will lose Response in further step, cannot print statusCode
                 .thenAccept(response->{
-                    System.out.println("Asynchronous HTTP GET, response statusCode : "+response.statusCode());
-                    System.out.println("Asynchronous HTTP GET, response body : "+response.body());
+                    //System.out.println("Asynchronous HTTP GET, response statusCode : "+response.statusCode());
+                    //System.out.println("Asynchronous HTTP GET, response body : "+response.body());
                 })
                 .exceptionally(e->{
-                   System.out.println("Asynchronous HTTP GET, error : "+e.getMessage());
+                   //System.out.println("Asynchronous HTTP GET, error : "+e.getMessage());
                    return null;
                 });
 
@@ -1009,7 +1012,134 @@ public class Java_Coding_Exercises_001 {
             //System.out.println("Asynchronous HTTP GET, body : " + body);
         }catch (Exception e){
             System.out.println("Async error : "+e.getMessage());
+            e.printStackTrace();
         }
+
+        //Files.readString from test.txt (create file first).
+        //D:\Mavishnu\000_PREPARATION\PREPARATION_2025\SpringBoot
+        //String path = "D:\\Mavishnu\\000_PREPARATION\\PREPARATION_2025\\SpringBoot\\test.txt"; // We can use \\ or single /
+        String path = "D:/Mavishnu/000_PREPARATION/PREPARATION_2025/SpringBoot/test.txt";
+        Path filePath = Path.of(path);
+
+        // Create file if it doesn't exist
+        if(!Files.exists(filePath)){
+            try {
+                Files.createFile(filePath);
+            }catch (IOException e){
+                System.err.println("Files.createFile, IOException : "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+        String content = "";
+        try {
+            content = Files.readString(filePath);
+        }catch (IOException e){
+            System.err.println("Files.readString, IOException : "+e.getMessage());
+            e.printStackTrace();
+        }
+
+        System.out.println("Files.readString, content : "+content);
+
+        //Files.writeString to file
+        try{
+            Files.writeString(filePath, "Funkynshot");
+        }catch (IOException e){
+            System.err.println("Files.writeString, IOException : "+e.getMessage());
+            e.printStackTrace();
+        }
+
+        try {
+            System.out.println("Files.readString, after Files.writeString, content : " + Files.readString(filePath));
+        }catch (IOException e){
+            System.err.println("Files.readString, after Files.writeString, IOException : "+e.getMessage());
+            e.printStackTrace();
+        }
+
+        //Append instead of overwrite (if you ever want to keep history):
+        try{
+            Files.writeString(filePath, "\nNewly added text", StandardOpenOption.APPEND);
+            System.out.println("Files.readString, after Files.writeString, APPEND content : " + Files.readString(filePath));
+        }catch(IOException e){
+            System.err.println("Files.writeString, APPEND, IOException : "+e.getMessage());
+            e.printStackTrace();
+        }
+
+        //list.toArray(String[]::new).
+        String[] stringArray = stringList.toArray(String[] :: new); //Converting List<String> stringList into String[] stringArray
+        System.out.println("list.toArray(String[]::new), Arrays.toString(stringArray) is "+Arrays.toString(stringArray));
+        System.out.println("list.toArray(String[]::new), stringArray.getClass() is "+stringArray.getClass());
+
+        /*
+        => String[]::new is a constructor reference of IntFunction<String[]>.
+        => The method internally calls generator.apply(list.size()) to create an array of exact size
+        => Returns correctly typed array — no cast needed, no warning.
+        => Common syntax : Type[] typedArray = Collection.toArray(Type[]::new);
+         */
+
+        //list.toArray(Integer[]::new)
+        Integer[] integerArray = integerList.toArray(Integer[] :: new);
+        System.out.println("list.toArray(Integer[]::new), Arrays.toString(integerArray) is "+Arrays.toString(integerArray));
+
+        //Predicate.not for non-empty check.
+        System.out.println("Printing non-empty strings from stringList, using predicate.not : ");
+
+        stringList.stream()
+                .filter(Objects::nonNull)
+                .filter(Predicate.not(String::isEmpty))
+                .forEach(System.out::println);
+
+        //Combine var + HTTP Client.
+        var httpClient = HttpClient.newHttpClient();
+        var httpRequest = HttpRequest.newBuilder(
+                URI.create("https://jsonplaceholder.typicode.com/posts/1")
+        ).timeout(Duration.ofSeconds(30)
+        ).build();
+
+        try {
+            var httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Combined var+HttpClient, Response status code : "+httpResponse.statusCode());
+            System.out.println("Combined var+HttpClient, Response body : "+httpResponse.body());
+        }catch (InterruptedException e){
+            System.err.println("InterruptedException error : "+e.getMessage());
+        }catch (IOException e){
+            System.err.println("IOException error : "+e.getMessage());
+        }
+
+        //var with nested generics.
+        var flattenedIntegerList = nestedIntegerList.stream()
+                //.flatMap(innerList->innerList==null?Stream.empty():innerList.stream())
+                .flatMap(Collection::stream)
+                .toList();
+
+        System.out.println("var with nested generics, nestedIntegerList"+nestedIntegerList+ ", flattenedIntegerList is "+flattenedIntegerList);
+
+        //Map<Integer, List<String>> optionalStringListGroupingByLength = optionalStringlist.stream()
+        var optionalStringListGroupingByLength = optionalStringlist.stream()
+                .filter(Objects::nonNull)
+                //.filter(Optional::isPresent)
+                //.map(Optional::get)
+                .flatMap(Optional::stream)//We can use this line instead of above 2, remember its not map, its flatMap
+                .collect(Collectors.groupingBy(
+                    String::length
+                ));
+
+        System.out.println("var with nested generics, optionalStringListGroupingByLength : "+optionalStringListGroupingByLength);
+
+        //Mixed: Multi-line string → lines() → filter non-blank → collect toList, etc
+        var nonBlankLinesList = multiLinesText.lines() //var type is List<String> here
+                .filter(Predicate.not(String::isBlank))
+                .toList();
+
+        System.out.println("Multi-line string → lines() → filter non-blank → collect toList, nonBlankLinesList is "+nonBlankLinesList);
+
+
+
+
+
+
+
+
 
 
     }
