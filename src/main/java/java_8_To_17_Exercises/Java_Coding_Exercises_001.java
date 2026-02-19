@@ -292,10 +292,12 @@ public class Java_Coding_Exercises_001 {
         Function<String, String> toUpperCase = String::toUpperCase;
         Function<String, Integer> parseInt = Integer::parseInt;
         Function<Integer, Integer> mathAbs = Math::abs;
+        Function<LocalDate, Month> getMonthFromLocalDate = LocalDate::getMonth;
 
-        System.out.println("Method Reference using Function, toUpperCase(\"Funkynshot\") "+toUpperCase.apply("Funkynshot")); //Output: FUNKYNSHOT
-        System.out.println("Method Reference using Function, parseInt(\"500\") "+parseInt.apply("500")); //Output: 500
-        System.out.println("Method Reference using Function, mathAbs(-12) "+mathAbs.apply(-12)); //Output: 12
+        System.out.println("Method Reference using Function, toUpperCase.apply(\"Funkynshot\") "+toUpperCase.apply("Funkynshot")); //Output: FUNKYNSHOT
+        System.out.println("Method Reference using Function, parseInt.apply(\"500\") "+parseInt.apply("500")); //Output: 500
+        System.out.println("Method Reference using Function, mathAbs.apply(-12) "+mathAbs.apply(-12)); //Output: 12
+        System.out.println("Method Reference using FUnction, getMonthFromLocalDate.apply(LocalDate.of(2026,2,19))) "+getMonthFromLocalDate.apply(LocalDate.of(2026,2,19))); //Output : FEBRUARY
 
         //Use constructor reference to create a new ArrayList.
         Supplier<ArrayList<Integer>> arrayListSupplier = ArrayList::new ;
