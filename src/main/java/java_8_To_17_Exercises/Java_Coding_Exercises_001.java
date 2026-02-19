@@ -121,7 +121,7 @@ public class Java_Coding_Exercises_001 {
         //If Interviewer wants modern way random.ints
         Supplier<Integer> supplier1 = () -> random.ints(2, 101).findFirst().orElse(2);
 
-        //Thread-safe version (if interviewer asks about concurrency)Java
+        //Thread-safe version (if interviewer asks about concurrency)
         Supplier<Integer> supplier2 = () -> ThreadLocalRandom.current().nextInt(2, 101);
 
         System.out.println("Supplier that generated random numbers (2–100), random number : " + supplier.get());
@@ -656,7 +656,7 @@ public class Java_Coding_Exercises_001 {
         System.out.println("Generate even numbers sequence using Stream.iterate + limit, evenNumbers : "+evenNumbers);
 
         //Generate 10 random numbers using Stream.generate + limit
-        List<Integer> randomNumbers = Stream.generate(()->new Random().nextInt(1, 51)) //1 to 50 inclusive (bound is exclusive)
+        List<Integer> randomNumbers = Stream.generate(()->new Random().nextInt(2, 101)) //2 to 100 inclusive (bound is exclusive)
                 .limit(10) //As they asked 10 random numbers only
                 .toList();
 
