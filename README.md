@@ -1,4 +1,6 @@
-**Coding practice for the following Java 8-17 exercise questions** 
+# Java 8–17 Interview Preparation – 100+ Solved Questions
+
+Comprehensive practice of modern Java features for senior/lead roles (Spring Boot, microservices, design interviews).
 
 001. Use lambda with forEach to print a list of strings with "Hello " prefix.
 002. Sort a list of integers in descending order using lambda Comparator.
@@ -101,3 +103,18 @@
 099. Mixed: Record + pattern matching, text block formatting, sealed hierarchy with switch, etc
 100. Mixed: Record + pattern matching, text block formatting, sealed hierarchy with switch, etc
 
+## Coverage
+- Lambdas & Functional Interfaces
+- Streams API (filter, map, flatMap, reduce, collect)
+- Optional, Date/Time API, Collectors
+- Method References, Default/Static interface methods
+- Records, Sealed classes, Text blocks, Pattern matching (Java 17)
+- Many common interview edge cases
+
+## Why this repo?
+- Daily practice to master Java 8–17 for interviews
+- Clean, commented code with explanations
+- Verified with output examples
+
+## Related Projects
+- Full Spring Boot application: [Employee Management System](https://github.com/Mavishnu-KJ/employeeManagementSystem)
