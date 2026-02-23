@@ -84,9 +84,9 @@ main class file : [Main_Class_Java_Coding_Exercises.java](src/main/java/java_8_T
 078. Mixed: Multi-line string → lines() → filter non-blank → collect toList, etc.
 079. Mixed: Multi-line string → lines() → filter non-blank → collect toList, etc.
 080. Mixed: Multi-line string → lines() → filter non-blank → collect toList, etc.
-081. Create record Employee(String name, int salary).
-082. Add compact constructor for validation (salary > 0).
-083. Add instance method to record (e.g., isHighEarner()).
+081. Create record Cricketer(String name, int centuries).
+082. Add compact constructor for validation (centuries >= 0).
+083. Add instance methods to record (e.g., isHighestCenturiesScorer(), isLowestCenturiesScorer(int thresold)), Demonstrate static field, static method.
 084. Sealed class Vehicle with permitted Car, Bike (final).
 085. Non-sealed class in hierarchy.
 086. Pattern matching instanceof with String, Integer, Employee.
