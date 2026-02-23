@@ -2,9 +2,6 @@
 
 Comprehensive practice of modern Java features for senior/lead roles (Spring Boot, microservices, design interviews).
 
-[![Java](https://img.shields.io/badge/Java-17-blue)](https://www.java.com)
-[![Progress](https://img.shields.io/badge/Progress-90%25-green)](https://github.com/Mavishnu-KJ/Java_8_To_17_Coding_Exercises)
-
 main class file : [Main_Class_Java_Coding_Exercises.java](src/main/java/java_8_To_17_Exercises/Main_Class_Java_Coding_Exercises.java)
 
 001. Use lambda with forEach to print a list of strings with "Hello " prefix.
