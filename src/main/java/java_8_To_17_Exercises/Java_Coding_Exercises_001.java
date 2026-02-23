@@ -1163,10 +1163,56 @@ public class Java_Coding_Exercises_001 {
         electricVehicle.start(); // Output : Electric vehicle starts...
         tesla.start(); // Output : Tesla starts...
 
+        //Text block for JSON string
+        String jsonString = """
+                {
+                	"cricketer": {
+                		"name": "MS Dhoni",
+                		"centuries": 16,
+                		"matches": 350,
+                		"teams": [
+                			"India",
+                			"Chennai Super Kings",
+                			"Rising Pune Supergiant"
+                		],
+                		"retired": true,
+                		"message": "He said \\"The process is more important than the result\\"",
+                	}
+                }
+                """;
 
+        //Text block for SQL query
+        String sqlQueryString = """
+                SELECT * FROM EMPLOYEES E 
+                WHERE E.ID = %d and E.name = %s ;
+                """.formatted(10, "Sachin Tendulkar");
 
+        //Text block with indentation handling
+        String indentationTextSample = """
+                What are Text Blocks in Java 15/17?
+                    => Text blocks are multi-line string literals using triple quotes \"""
+                    => They eliminate escape sequences for new lines/quotes and preserve formatting
+                    => Incidental leading white space gets trimmed automatically
+                    
+                Line 1
+                Line 2
+                    Line 3 (extra indent)
+                Line 4    
+                """;
 
+        /*
+        NOTE : Quick Rules to Remember
 
+        To include """ inside the text block → write \ """ (backslash + triple quotes)
+        The backslash escapes the first quote → the whole """ is treated as literal text
+        You can escape any number of consecutive triple quotes the same way
+        No need to escape single or double quotes unless they are part of a larger escape sequence
+
+         */
+
+        System.out.println("Text block for JSON string, jsonString : \n"+jsonString);
+        System.out.println("Text block for SQL query, sqlQueryString : \n"+sqlQueryString);
+        System.out.println("Text block with indentation handling, indentationTextSample : \n"+indentationTextSample);
 
     }
 
