@@ -1133,12 +1133,13 @@ public class Java_Coding_Exercises_001 {
 
         System.out.println("Multi-line string → lines() → filter non-blank → collect toList, nonBlankLinesList is "+nonBlankLinesList);
 
-        //Instantiating objects for the record Cricketer 
+        //Instantiating objects for the record Cricketer
+        //Cricketer tendulkar = new Cricketer(); // Will give compilation error as record won't have default implicit no-arg constructor
         Cricketer tendulkar = new Cricketer("Sachin Tendulkar", 100);
         Cricketer dhoni = new Cricketer("MS Dhoni", 16);
         Cricketer kohli = new Cricketer("Virat Kohli", 85);
         Cricketer jadeja = new Cricketer("Ravindra Jadeja", 6);
-        Cricketer sooryavanshi = Cricketer.unCappedCricketer("Sooryavanshi"); //Instantiating Object with Static method
+        Cricketer sooryavanshi = Cricketer.unCappedCricketer("Sooryavanshi"); //Instantiating Object with Static (factory) method
 
         //Check if he has highest centuries
         System.out.println("Is Tendulkar highest centuries scorer? "+tendulkar.isHighestCenturiesScorer()+", total centuries : "+tendulkar.centuries());
@@ -1149,8 +1150,18 @@ public class Java_Coding_Exercises_001 {
         System.out.println("Is Jadeja lowest centuries scorer? "+jadeja.isLowestCenturiesScorer(10)+", total centuries : "+jadeja.centuries());
         System.out.println("Is Sooryavanshi lowest centuries scorer? "+sooryavanshi.isLowestCenturiesScorer(10)+", total centuries : "+sooryavanshi.centuries());
         
+        //Sealed class
+        Vehicle vehicle = new Vehicle();
+        Vehicle car = new Car();
+        Vehicle bike = new Bike();
+        Vehicle electricVehicle = new ElectricVehicle();
+        Vehicle tesla = new Tesla();
 
-
+        vehicle.start(); // Output : Vehicle starts...
+        car.start(); // Output : Car starts...
+        bike.start(); // Output : Bike starts...
+        electricVehicle.start(); // Output : Electric vehicle starts...
+        tesla.start(); // Output : Tesla starts...
 
 
 
