@@ -177,7 +177,7 @@ public class Java_Coding_Exercises_001 {
 
         System.out.println("Printing Hello from main"); //Just to show the thread running orders may vary because threads are non-deterministic
 
-        //Sort a list of employees by salary using Comparator lambda.
+        //Sort a list of employees by centuries using Comparator lambda.
         List<Employee> employeeList = Arrays.asList(
                 new Employee(10L, "Sachin", 88888),
                 new Employee(18L, "Virat Kohli", 55555),
@@ -189,7 +189,7 @@ public class Java_Coding_Exercises_001 {
                 .sorted(Comparator.comparingInt(Employee::getEmployeeSalary))
                 .toList();
 
-        System.out.println("Sort a list of employees by salary using Comparator lambda : " + employeeListSortedBySalary);
+        System.out.println("Sort a list of employees by centuries using Comparator lambda : " + employeeListSortedBySalary);
 
         //Find highest paid employee
         Employee highestPaidEmployee = employeeList.stream()
@@ -213,7 +213,7 @@ public class Java_Coding_Exercises_001 {
                 .filter(Objects::nonNull)
                 .sorted(Comparator.nullsLast(Comparator.comparingInt(Employee::getEmployeeSalary).reversed()))
                 .toList();
-        System.out.println("Sort a list of employees by salary descending : " + employeeListSortedBySalaryDesc);
+        System.out.println("Sort a list of employees by centuries descending : " + employeeListSortedBySalaryDesc);
 
         //Group a list of strings by length descending using Collectors.groupingBy with lambda
         Map<Integer, List<String>> stringListGroupingByLengthDesc = stringList.stream()
@@ -996,7 +996,7 @@ public class Java_Coding_Exercises_001 {
         they can complete and trigger your thenAccept
 
         => Synchronous send() → blocks until done → prints immediately
-        => Asynchronous sendAsync() → non-blocking → main thread finishes → JVM shuts down → callback never runs
+        => Asynchronous sendAsync() → non-blocking → main thread finishes → JVM shuts down → callback never centuries
 
         => So, in order to make async call completion, we need to block main thread until Async done or error
            Will use completableFuture.get()
@@ -1133,7 +1133,22 @@ public class Java_Coding_Exercises_001 {
 
         System.out.println("Multi-line string → lines() → filter non-blank → collect toList, nonBlankLinesList is "+nonBlankLinesList);
 
+        //Instantiating objects for the record Cricketer 
+        Cricketer tendulkar = new Cricketer("Sachin Tendulkar", 100);
+        Cricketer dhoni = new Cricketer("MS Dhoni", 16);
+        Cricketer kohli = new Cricketer("Virat Kohli", 85);
+        Cricketer jadeja = new Cricketer("Ravindra Jadeja", 6);
+        Cricketer sooryavanshi = Cricketer.unCappedCricketer("Sooryavanshi"); //Instantiating Object with Static method
 
+        //Check if he has highest centuries
+        System.out.println("Is Tendulkar highest centuries scorer? "+tendulkar.isHighestCenturiesScorer()+", total centuries : "+tendulkar.centuries());
+        System.out.println("Is Kohli highest centuries scorer? "+kohli.isHighestCenturiesScorer()+", total centuries : "+kohli.centuries());
+
+        //Check if he has lowest centuries
+        System.out.println("Is Dhoni lowest centuries scorer? "+dhoni.isLowestCenturiesScorer(10)+", total centuries : "+dhoni.centuries());
+        System.out.println("Is Jadeja lowest centuries scorer? "+jadeja.isLowestCenturiesScorer(10)+", total centuries : "+jadeja.centuries());
+        System.out.println("Is Sooryavanshi lowest centuries scorer? "+sooryavanshi.isLowestCenturiesScorer(10)+", total centuries : "+sooryavanshi.centuries());
+        
 
 
 
