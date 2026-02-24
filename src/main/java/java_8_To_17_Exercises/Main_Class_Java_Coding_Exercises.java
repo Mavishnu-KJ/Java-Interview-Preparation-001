@@ -1278,6 +1278,38 @@ public class Main_Class_Java_Coding_Exercises {
         System.out.println("c1.equals(c2) ? : "+c1.equals(c2)); //Output : true due to case in-sensitive equals method in record
         System.out.println("c1.equals(c3) ? : "+c1.equals(c3)); //Output : false
 
+        //Trigger enhanced NPE and read message
+        //Case 1: Classic NPE (Pre-Java 14 - vague message)
+        String nullString = null;
+        //System.out.println("NPE, nullString.length() : "+nullString.length()); //NullPointerException (no helpful detail in Pre-Java 14)
+
+        //Case 2: Enhanced NPE (Java 14+) – detailed message
+        try{
+            System.out.println("NPE, tyring to find null string length : "+nullString.length());
+        }catch(NullPointerException e){
+            System.out.println("NPE, exception : "+e.getMessage());
+            //Output : NPE, exception : Cannot invoke "String.length()" because "nullString" is null
+        }
+
+        //Case 3 : Null array element
+        String[] nullStringArray = {"Sachin", null, "Virat"};
+        try{
+            System.out.println("NPE, nullStringArray[1].length() : "+nullStringArray[1].length());
+        }catch(NullPointerException e){
+            System.out.println("NPE, exception : "+e.getMessage());
+            //Output : NPE, exception : Cannot invoke "String.length()" because "nullStringArray[1]" is null
+        }
+
+        //Case 4 : More complex chain (shows exact location)
+        Person person = new Person(null, new Address(null, "Chennai"));
+        try{
+            System.out.println("NPE, person.address().street().length() : "+person.address().street().length());
+        }catch(NullPointerException e){
+            System.out.println("NPE, exception : "+e.getMessage());
+            //NPE, exception : Cannot invoke "String.length()" because the return value of "java_8_To_17_Exercises.Address.street()" is null
+        }
+
+        //NOTE : So, the enhance NPE Message clearly shows which variable was null and which method failed
 
     }
 
