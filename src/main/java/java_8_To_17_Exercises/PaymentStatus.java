@@ -13,7 +13,7 @@ public sealed interface PaymentStatus permits PaymentSuccess, PaymentFailure, Pa
         return switch (code){
           case 200, 201 -> new PaymentSuccess("Tx" + System.currentTimeMillis());
           case 400, 402 -> new PaymentFailure("Payment declined");
-          default -> new PaymentPending("Awaiting confirmation");
+          default -> new PaymentPending();
         };
     }
 }

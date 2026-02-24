@@ -1363,9 +1363,9 @@ public class Main_Class_Java_Coding_Exercises {
     //5. Exhaustive Pattern Matching with switch - sealed interface
     public static String describeObjectWithExhaustivePattern(PaymentStatus paymentStatus){
         return switch (paymentStatus){
-            case PaymentSuccess success -> "Payment success : "+success.transactionId();
-            case PaymentFailure failure -> "Payment failed : "+failure.failureReason();
-            case PaymentPending pending -> "Payment pending : "+pending.message();
+            case PaymentSuccess success -> "Payment success : "+success.getStatusMessage();
+            case PaymentFailure failure -> "Payment failed : "+failure.getStatusMessage();
+            case PaymentPending pending -> "Payment pending : "+pending.getStatusMessage();
             //default -> "Default" // No default needed — compiler knows all cases covered!,
             //This is exhaustive pattern compiler check
         };
