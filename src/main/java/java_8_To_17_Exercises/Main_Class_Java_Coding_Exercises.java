@@ -1269,6 +1269,16 @@ public class Main_Class_Java_Coding_Exercises {
         System.out.println("Exhaustive Pattern Matching with switch - sealed interface");
         paymentStatusList.forEach(obj->System.out.println(describeObjectWithExhaustivePattern(obj)));
 
+        //Record with custom equals/hashCode (override if needed).
+        Cricketer c1 = new Cricketer("Sachin", 100);
+        Cricketer c2 = new Cricketer("SacHIN", 150);
+        Cricketer c3 = new Cricketer("Sachin Tendulkar", 100);
+
+        System.out.println("Record with custom equals, hashCode methods, case in-sensitive equals");
+        System.out.println("c1.equals(c2) ? : "+c1.equals(c2)); //Output : true due to case in-sensitive equals method in record
+        System.out.println("c1.equals(c3) ? : "+c1.equals(c3)); //Output : false
+
+
     }
 
     //1. Pattern matching instanceof using if-else statement

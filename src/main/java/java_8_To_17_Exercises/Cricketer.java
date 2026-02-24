@@ -56,7 +56,34 @@ public record Cricketer(String name, int centuries) {
         return new Cricketer(name, 0);
     }
 
-    //Pattern matching instanceof with String, Integer, Employee.
+    //Record with custom equals/hashCode (override if needed).
 
+    // Custom equals: case-insensitive name
+    @Override
+    public boolean equals(Object obj){
+        //this - current entry, obj - existing entry
+        if(this==obj) return true;
+        if(obj==null || this.getClass() != obj.getClass()) return false;
+
+        Cricketer other = (Cricketer) obj;
+
+        return this.name == null ? other.name == null : this.name.equalsIgnoreCase(other.name);
+    }
+
+    @Override
+    public int hashCode(){
+        //hashCode for null value is 0
+        return this.name == null ? 0 : this.name.toLowerCase().hashCode();
+    }
+
+    //Record with custom toString() (override if needed).
+    @Override
+    public String toString(){
+        return "Cricketer{ name : "
+                +name+
+                ", centuries : "
+                +centuries+
+                "}";
+    }
 
 }
