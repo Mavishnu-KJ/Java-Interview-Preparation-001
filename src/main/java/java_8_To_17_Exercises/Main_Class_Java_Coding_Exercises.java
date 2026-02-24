@@ -1217,33 +1217,45 @@ public class Main_Class_Java_Coding_Exercises {
         Object obj3 = 3.14; //Double
         Object obj4 = "Funkynshot"; //String
         Object obj5 = new Language("Java","Enterprise-Level applications"); //record
-        Object obj6 = new Employee(10L, "Sachin", 88888); //class
+        Object obj6 = new Employee(10L, "Sachin", 888888); //class
+        Object obj7 = Cricketer.unCappedCricketer("Sooryavanshi"); //record
+        Object obj8 = new Cricketer("Sachin Tendulkar", 100);
+        Object obj9 = new Employee(5L, "Jing", 80000);
+
+        List<Object> objectList = Arrays.asList(
+                obj1, obj2, obj3, obj4, obj5, obj6, obj7, obj8, obj9
+        );
 
         //NOTE : Primitives (int, long, double) not supported in pattern matching
 
         //1. Call pattern matching instanceof using if-else statement
-        describeObject(obj1);
-        describeObject(obj2);
-        describeObject(obj3);
-        describeObject(obj4);
-        describeObject(obj5);
-        describeObject(obj6);
+        //describeObject(obj1);
+        //describeObject(obj2);
+        //describeObject(obj3);
+        //describeObject(obj4);
+        //describeObject(obj5);
+        //describeObject(obj6);
+        objectList.forEach(obj->describeObject(obj));
 
         //2. Call pattern matching instanceof using switch case
+        /*
         describeObjectUsingSwitch(obj1);
         describeObjectUsingSwitch(obj2);
         describeObjectUsingSwitch(obj3);
         describeObjectUsingSwitch(obj4);
         describeObjectUsingSwitch(obj5);
         describeObjectUsingSwitch(obj6);
+        */
+        objectList.forEach(Main_Class_Java_Coding_Exercises :: describeObjectUsingSwitch);
+
 
         //3. Call pattern matching instanceof using concise switch case
         System.out.println("Pattern matching using concise switch case");
-        System.out.println(describeObjectUsingSwitchConcise(obj1));
-        System.out.println(describeObjectUsingSwitchConcise(obj2));
-        System.out.println(describeObjectUsingSwitchConcise(obj5));
-        System.out.println(describeObjectUsingSwitchConcise(obj6));
+        objectList.forEach(obj->System.out.println(describeObjectUsingSwitchConcise(obj)));
 
+        //4. Call guarded pattern in switch
+        System.out.println("Guarded pattern in switch");
+        objectList.forEach(obj->System.out.println(describeObjectWithGuardedPatternInSwitch(obj)));
 
     }
 
@@ -1301,5 +1313,44 @@ public class Main_Class_Java_Coding_Exercises {
         };
     }
 
+    //4. Guarded pattern in switch
+    public static String describeObjectWithGuardedPatternInSwitch(Object obj){
+
+        return switch (obj){
+
+            //Guarded pattern with when
+            case Integer i when i>0 && i%2==0 -> "Integer : even number "+i;
+            case Integer i when i>0 && i%2!=0 -> "Integer : odd number "+i;
+
+            //Without guarded pattern
+            case Integer i -> "Integer : "+i;
+
+            //record deconstruction + Guarded pattern with when
+            case Cricketer c when c.centuries() == 100 -> {
+                String recordDeconstruction = "name : "+c.name()+", centuries : "+c.centuries();
+                yield "Cricketer : Highest century scorer "+recordDeconstruction;
+            }
+
+            //Without guarded pattern
+            case Cricketer c -> "Cricketer : "+c;
+
+            //Class deconstruction + Guarded pattern with when
+            case Employee emp when emp.getEmployeeSalary() < 100000 -> {
+                String classDeconstruction = "name : "+emp.getEmployeeName()+", salary : "+emp.getEmployeeSalary();
+                yield "Employee : lowest salary employee "+classDeconstruction;
+            }
+
+            //Without guarded pattern
+            case Employee emp -> "Employee : "+emp;
+            case null -> "null value";
+
+            default -> "Unknown type : "+obj.getClass().getSimpleName();
+        };
+
+    }
+
+
 
 }
+
+
