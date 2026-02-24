@@ -56,4 +56,7 @@ public record Cricketer(String name, int centuries) {
         return new Cricketer(name, 0);
     }
 
+    //Pattern matching instanceof with String, Integer, Employee.
+
+
 }

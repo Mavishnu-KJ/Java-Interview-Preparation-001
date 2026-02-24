@@ -1211,6 +1211,95 @@ public class Main_Class_Java_Coding_Exercises {
         System.out.println("Text block for SQL query, sqlQueryString : \n"+sqlQueryString);
         System.out.println("Text block with indentation handling, indentationTextSample : \n"+indentationTextSample);
 
+        //Pattern matching instanceof with String, Integer, record Language.
+        Object obj1 = 10; //Integer
+        Object obj2 = 18L; //Long
+        Object obj3 = 3.14; //Double
+        Object obj4 = "Funkynshot"; //String
+        Object obj5 = new Language("Java","Enterprise-Level applications"); //record
+        Object obj6 = new Employee(10L, "Sachin", 88888); //class
+
+        //NOTE : Primitives (int, long, double) not supported in pattern matching
+
+        //1. Call pattern matching instanceof using if-else statement
+        describeObject(obj1);
+        describeObject(obj2);
+        describeObject(obj3);
+        describeObject(obj4);
+        describeObject(obj5);
+        describeObject(obj6);
+
+        //2. Call pattern matching instanceof using switch case
+        describeObjectUsingSwitch(obj1);
+        describeObjectUsingSwitch(obj2);
+        describeObjectUsingSwitch(obj3);
+        describeObjectUsingSwitch(obj4);
+        describeObjectUsingSwitch(obj5);
+        describeObjectUsingSwitch(obj6);
+
+        //3. Call pattern matching instanceof using concise switch case
+        System.out.println("Pattern matching using concise switch case");
+        System.out.println(describeObjectUsingSwitchConcise(obj1));
+        System.out.println(describeObjectUsingSwitchConcise(obj2));
+        System.out.println(describeObjectUsingSwitchConcise(obj5));
+        System.out.println(describeObjectUsingSwitchConcise(obj6));
+
+
     }
+
+    //1. Pattern matching instanceof using if-else statement
+    public static void describeObject(Object obj){
+        System.out.println("Pattern matching using if-else block");
+        if(obj instanceof Integer i){
+            System.out.println("Integer : "+i);
+        }else if(obj instanceof Long l){
+            System.out.println("Long : "+l);
+        }else if(obj instanceof Double d){
+            System.out.println("Double : "+d);
+        }else if(obj instanceof String s){
+            System.out.println("String : "+s+", length : "+s.length());
+        }else if(obj instanceof Language lang){ //record Language
+            System.out.println("Language : "+lang);
+            System.out.print("name : "+lang.name()+", primary Use : "+lang.primaryUse()+"\n"); //record deconstruction
+        }else if(obj == null){
+            System.out.println("null value");
+        }else { //If nothing matched, then default case
+            System.out.println("Unknown type : "+obj.getClass().getSimpleName());
+        }
+    }
+
+    //2. Pattern matching instanceof using switch case
+    public static void describeObjectUsingSwitch(Object obj){
+        System.out.println("Pattern matching using switch case");
+        switch (obj){
+            case Integer i -> System.out.println("Integer : "+i);
+            case Long l -> System.out.println("Long : "+l);
+            case Double d -> System.out.println("Double : "+d);
+            case String s -> System.out.println("String : "+s);
+            case Language lang -> {
+                System.out.println("Language : "+lang);
+                System.out.print("name : "+lang.name()+", primary Use : "+lang.primaryUse()+"\n"); //record deconstruction
+            }
+            case null -> System.out.println("null value");
+            default -> System.out.println("Unknown type : "+obj.getClass().getSimpleName());
+        };
+    }
+
+    //3. Pattern matching instanceof using concise switch case, Here return type is String
+    public static String describeObjectUsingSwitchConcise(Object obj){
+        return switch (obj){
+            case Integer i -> "Integer : "+i;
+            case Long l -> "Long : "+l;
+            case Double d -> "Double : "+d;
+            case String s -> "String : "+s;
+            case Language lang -> {
+                String recordDeconstruction = "name : "+lang.name()+", primary use : "+lang.primaryUse();
+                yield "Language : "+lang+"\n"+recordDeconstruction; //yield keyword is used to return the value in switch
+            }
+            case null -> "null value";
+            default -> "Unknown type : "+obj.getClass().getSimpleName();
+        };
+    }
+
 
 }
