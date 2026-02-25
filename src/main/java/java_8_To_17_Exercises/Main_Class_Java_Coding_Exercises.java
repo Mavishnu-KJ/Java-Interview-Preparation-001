@@ -174,7 +174,7 @@ public class Main_Class_Java_Coding_Exercises {
 
         System.out.println("Printing Hello from main"); //Just to show the thread running orders may vary because threads are non-deterministic
 
-        //Sort a list of employees by centuries using Comparator lambda.
+        //Sort a list of employees by salary using Comparator lambda.
         List<Employee> employeeList = Arrays.asList(
                 new Employee(10L, "Sachin", 88888),
                 new Employee(18L, "Virat Kohli", 55555),
@@ -184,6 +184,7 @@ public class Main_Class_Java_Coding_Exercises {
         List<Employee> employeeListSortedBySalary = employeeList.stream()
                 .filter(Objects::nonNull)
                 .sorted(Comparator.comparingInt(Employee::getEmployeeSalary))
+                //.sorted((e1, e2) -> Integer.compare(e1.getSalary(), e2.getSalary()))
                 .toList();
 
         System.out.println("Sort a list of employees by centuries using Comparator lambda : " + employeeListSortedBySalary);
