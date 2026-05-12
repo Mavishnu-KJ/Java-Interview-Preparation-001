@@ -245,8 +245,8 @@ public class MainClassForExercises0001 {
 
         //Case 1: If value is present
         optionalWithNonNullValueString.ifPresentOrElse(
-                (value) -> System.out.println(value), // Can use System.out::println instead
-                () -> System.out.println("default")
+                (value) -> System.out.println(value), //First lambda: Consumer if value present // Can use System.out::println instead 
+                () -> System.out.println("default") //Second lambda: Runnable if absent
         );
 
         //Case 2: If value is not present
@@ -273,7 +273,7 @@ public class MainClassForExercises0001 {
                 return true;
             if (n % 2 == 0)
                 return false;
-            for (int i = 3; i <= Math.sqrt(n); i = i + 2) {
+            for (long i = 3; i <= Math.sqrt(n); i = i + 2) { //Use long for i in loop (safer for very large n)
                 if (n % i == 0)
                     return false;
             }
