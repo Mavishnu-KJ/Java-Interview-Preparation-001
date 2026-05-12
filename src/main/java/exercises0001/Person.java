@@ -1,4 +1,4 @@
-package java_8_To_17_Exercises;
+package exercises0001;
 
 public record Person(String name, Address address) {
 }

@@ -1,4 +1,4 @@
-package java_8_To_17_Exercises;
+package exercises0001;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Main_Class_Java_Coding_Exercises {
+public class MainClassForExercises0001 {
 
     public static void main(String[] args) {
 
@@ -1247,7 +1247,7 @@ public class Main_Class_Java_Coding_Exercises {
         describeObjectUsingSwitch(obj5);
         describeObjectUsingSwitch(obj6);
         */
-        objectList.forEach(Main_Class_Java_Coding_Exercises :: describeObjectUsingSwitch);
+        objectList.forEach(MainClassForExercises0001:: describeObjectUsingSwitch);
 
 
         //3. Call pattern matching instanceof using concise switch case

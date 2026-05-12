@@ -1,4 +1,4 @@
-package java_8_To_17_Exercises;
+package exercises0001;
 
 public interface Calculator {
     int calc(int a, int b);

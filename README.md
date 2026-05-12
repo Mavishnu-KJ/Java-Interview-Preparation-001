@@ -2,7 +2,7 @@
 
 Comprehensive practice of modern Java features for senior/lead roles (Spring Boot, microservices, design interviews).
 
-main class file : [Main_Class_Java_Coding_Exercises.java](src/main/java/java_8_To_17_Exercises/Main_Class_Java_Coding_Exercises.java)
+main class file : [Main_Class_Java_Coding_Exercises.java](src/main/java/exercises0001/Main_Class_Java_Coding_Exercises.java)
 
 001. Use lambda with forEach to print a list of strings with "Hello " prefix.
 002. Sort a list of integers in descending order using lambda Comparator.

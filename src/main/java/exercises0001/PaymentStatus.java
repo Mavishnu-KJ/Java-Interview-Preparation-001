@@ -1,4 +1,4 @@
-package java_8_To_17_Exercises;
+package exercises0001;
 
 //sealed interface - Only permitted subclasses/records can implement
 public sealed interface PaymentStatus permits PaymentSuccess, PaymentFailure, PaymentPending {

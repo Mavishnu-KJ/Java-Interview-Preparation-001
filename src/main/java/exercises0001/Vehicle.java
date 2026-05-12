@@ -1,4 +1,4 @@
-package java_8_To_17_Exercises;
+package exercises0001;
 
 //sealed class with permitted subclasses
 //NOTE : All subclasses must be in same package

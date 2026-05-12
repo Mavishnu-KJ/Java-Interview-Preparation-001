@@ -1,4 +1,4 @@
-package java_8_To_17_Exercises;
+package exercises0001;
 
 //final class - Cannot be extended further
 public final class Car extends Vehicle{
