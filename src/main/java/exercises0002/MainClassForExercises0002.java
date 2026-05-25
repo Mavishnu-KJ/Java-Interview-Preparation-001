@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class MainClassForExercises0002 {
     public static void main(String[] args){
@@ -84,6 +85,42 @@ public class MainClassForExercises0002 {
         System.out.println("Implement a custom functional interface \"Calculator\" with add and subtract methods using lambda");
         System.out.println("addFunction.operate(6,4) is "+addFunction.operate(6,4));
         System.out.println("subtractFunction.operate(6,4) is "+subtractFunction.operate(6,4));
+
+        //Use lambda with Runnable to print "Hello from thread".
+        Runnable runnable = () -> System.out.println("Hello from thread "+Thread.currentThread().getName());
+
+        Thread t1 = new Thread(runnable, "Thread_01");
+        t1.start(); //Calling runnable from thread t1
+        runnable.run(); //Calling runnable from main thread
+
+        System.out.println("Direct Printing from "+Thread.currentThread().getName()); //Just to show the thread running orders may vary because threads are non-deterministic
+
+        //Sort a list of employees by salary using Comparator lambda
+        List<Employee> employeeList = Arrays.asList(
+                new Employee(18, "Virat", 55555.00),
+                new Employee(10, "Sachin", 88888.00),
+                new Employee(7, "Dhoni", 77777.00)
+        );
+
+        List<Employee> employeeListSortedBySalary = employeeList.stream()
+                .filter(Objects::nonNull)
+                //.sorted((e1, e2) -> e1.employeeSalary().compareTo(e2.employeeSalary()))
+                .sorted(Comparator.comparingDouble(Employee::employeeSalary))
+                .toList();
+        System.out.println("Sort a list of employees by salary using Comparator lambda, employeeListSortedBySalary is "+employeeListSortedBySalary);
+
+        //Group a list of strings by length desc using Collectors.groupingBy with lambda
+        Map<Integer, List<String>> stringListGroupingByLengthDesc = stringList.stream()
+                .filter(s -> s!=null && !s.isBlank())
+                .collect(
+                        Collectors.groupingBy(
+                                String :: length,
+                                () -> new TreeMap<>((a,b) -> b.compareTo(a)),
+                                Collectors.toList()
+                        )
+                );
+
+        System.out.println("Group a list of strings by length desc using Collectors.groupingBy with lambda, stringListGroupingByLengthDesc is \n"+stringListGroupingByLengthDesc);
 
 
 
