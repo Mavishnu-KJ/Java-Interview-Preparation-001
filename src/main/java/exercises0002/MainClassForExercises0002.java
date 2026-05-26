@@ -1,5 +1,7 @@
 package exercises0002;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -16,6 +18,10 @@ public class MainClassForExercises0002 {
         List<Integer> integerList = Arrays.asList(
                 10, 2, 3, null, 4, 5, 9, 6, 7, 100, 98
         );
+
+        String nonNullValueString = "Funkynshot";
+        String nullValueString = null;
+        String emptyString = "";
 
 
         //Use lambda with forEach to print a list of strings with "Hello " prefix.
@@ -122,7 +128,93 @@ public class MainClassForExercises0002 {
 
         System.out.println("Group a list of strings by length desc using Collectors.groupingBy with lambda, stringListGroupingByLengthDesc is \n"+stringListGroupingByLengthDesc);
 
+        //Use Optional with lambda: If value present, print it; else print default.
+        //Value present
+        Optional.ofNullable(nonNullValueString).ifPresentOrElse(
+                (value) -> System.out.println(value),
+                () -> System.out.println("default")
+        );
+        //Value not present
+        Optional.ofNullable(nullValueString).ifPresentOrElse(
+                (value) -> System.out.println(value),
+                () -> System.out.println("default")
+        );
 
+        //empty string will be considered as valid value in the context of Optional
+        Optional.ofNullable(emptyString).ifPresentOrElse(
+                (value) -> System.out.println(value),
+                () -> System.out.println("default")
+        );
+
+        //Create a Predicate that checks if a number is prime (using lambda).
+        Predicate<Integer> isPrimeNumber = n -> {
+
+            //Prime number rules
+            //0 is not a prime number
+            //1 is not a prime number
+            //2 is only one even prime number
+            //if n%2 == 0, not prime number
+            //i<=Math.sqrt(n) or i*i <= n
+
+            if(n <= 1){
+                return false;
+            }
+
+            if(n==2){
+                return true;
+            }
+
+            if(n%2==0){
+                return false;
+            }
+
+            for(long i=3; i*i<=n; i=i+2){
+                if(n%i==0){
+                    return false;
+                }
+            }
+
+            return true;
+
+        };
+
+        System.out.println("Create a Predicate that checks if a number is prime (using lambda)");
+        System.out.println("Is 0 prime? "+isPrimeNumber.test(0));
+        System.out.println("Is 1 prime? "+isPrimeNumber.test(1));
+        System.out.println("Is 2 prime? "+isPrimeNumber.test(2));
+        System.out.println("Is 3 prime? "+isPrimeNumber.test(3));
+        System.out.println("Is 33 prime? "+isPrimeNumber.test(33));
+
+        //Use lambda with Stream: Filter names starting with "D", map to uppercase, collect to list.
+        List<String> nameStartsWithDInTheStringList = stringList.stream()
+                .filter(s -> Objects.nonNull(s) && !s.isBlank() && s.startsWith("D"))
+                .map(String::toUpperCase)
+                .toList();
+
+        System.out.println("Use lambda with Stream: Filter names starting with \"D\", map to uppercase, collect to list, nameStartsWithSInTheStringList : "+nameStartsWithDInTheStringList);
+
+        //Implement a method reference for static method (e.g., String::toUpperCase).
+
+        Function<String, String> toUpperCase = String::toUpperCase;
+        Function<String, Integer> parseInt = Integer::parseInt;
+        Function<Integer, Integer> mathAbs = Math::abs;
+        Function<LocalDate, Month> getMonthFromLocalDate = LocalDate::getMonth;
+
+        System.out.println("Method Reference using Function, toUpperCase.apply(\"Funkynshot\") " + toUpperCase.apply("Funkynshot")); //Output: FUNKYNSHOT
+        System.out.println("Method Reference using Function, parseInt.apply(\"500\") " + parseInt.apply("500")); //Output: 500
+        System.out.println("Method Reference using Function, mathAbs.apply(-12) " + mathAbs.apply(-12)); //Output: 12
+        System.out.println("Method Reference using FUnction, getMonthFromLocalDate.apply(LocalDate.of(2026,2,19))) " + getMonthFromLocalDate.apply(LocalDate.of(2026, 2, 19))); //Output : FEBRUARY
+
+        //Use constructor reference to create a new ArrayList.
+        Supplier<ArrayList<String>> arrayListSupplier = ArrayList :: new;
+
+        List<String> arrayListFromSupplier = arrayListSupplier.get();
+        arrayListFromSupplier.add("Hey");
+        arrayListFromSupplier.add("Hi");
+        arrayListFromSupplier.add("Cool");
+        System.out.println("Use constructor reference to create a new ArrayList, arrayListFromSupplier : "+arrayListFromSupplier);
+
+        //Handle checked exception in lambda (wrap in try-catch or custom functional interface).
 
 
     }

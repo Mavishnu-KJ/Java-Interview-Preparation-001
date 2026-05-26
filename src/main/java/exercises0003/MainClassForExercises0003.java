@@ -82,7 +82,13 @@ public class MainClassForExercises0003 {
         System.out.println("subtractMethod.operate(6,4) : "+subtractMethod.operate(6,4));
 
         //Use lambda with Runnable to print "Hello from thread".
+        Runnable runnable = () -> System.out.println("Hello from thread "+Thread.currentThread().getName());
 
+        Thread t1 = new Thread(runnable, "Thread_01");
+        t1.start(); //Running the runnable from thread t1
+        runnable.run(); //Running the runnable from thread main
+
+        System.out.println("Directing printing from "+Thread.currentThread().getName()); //Just to show the orders can vary because thread behaviors are non-deterministic
 
 
 
