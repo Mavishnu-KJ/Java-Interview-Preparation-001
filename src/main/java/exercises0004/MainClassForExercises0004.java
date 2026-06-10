@@ -96,6 +96,59 @@ public class MainClassForExercises0004 {
             System.out.println(dept+", Employee : "+emp.name()+", Rs. "+emp.salary());
         });
 
+        /*
+        Frequency Count: Given a string,
+        find the frequency of each character, and filter out the top 3 most frequent elements using Streams.
+        */
+
+        String str = "aaabbbbbbcccdddd";
+        Map<Character, Long> characterFrequencyMap = str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        c -> c,
+                        Collectors.counting()
+                )).entrySet().stream()
+                .sorted((e1,e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .limit(3)
+                .collect(Collectors.toMap(
+                        Map.Entry :: getKey,
+                        Map.Entry :: getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap :: new
+                ));
+
+        characterFrequencyMap.forEach((c, freq)->{
+            System.out.println(c +" repeated "+freq+" times");
+        });
+
+        /*
+        Frequency Count: Given a list of words,
+        find the frequency of each word, and filter out the top 3 most frequent elements using Streams.
+        */
+
+        List<String> listOfWords = Arrays.asList(
+                "banana", "banana", "apple", "orange", "banana",
+                "banana", "orange", "banana", "apple", "orange"
+        );
+
+        Map<String, Long> wordFrequencyMap = listOfWords.stream()
+                .collect(Collectors.groupingBy(
+                        s -> s,
+                        Collectors.counting()
+                )).entrySet().stream()
+                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .limit(3)
+                .collect(Collectors.toMap(
+                        Map.Entry :: getKey,
+                        Map.Entry :: getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap :: new
+                ));
+
+        wordFrequencyMap.forEach((word, freq) ->{
+            System.out.println(word+" repeated "+freq+" times");
+        });
+
 
 
 
