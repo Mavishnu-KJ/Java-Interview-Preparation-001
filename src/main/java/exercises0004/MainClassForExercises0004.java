@@ -1,6 +1,7 @@
 package exercises0004;
 
-import java.util.Arrays;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -25,6 +26,79 @@ public class MainClassForExercises0004 {
 
         int[] flattenedArray = flatten(inputArrayWithMixedObjectsArraysIntegers);
         System.out.println("flattenedArray : "+Arrays.toString(flattenedArray));
+
+
+        /*
+        Group and Aggregate Data: Given a list of Employee objects (with fields: id, name, department, salary),
+        write a stream pipeline to find the highest-paid employee in each department.
+        */
+
+        List<Employee> employeeList = List.of(
+                new Employee(7, "Dhoni", "IPL", 777777.00),
+                new Employee(10, "Sachin", "Cricket", 888888.00),
+                new Employee(18, "Virat", "IPL", 555555.00),
+                new Employee(12, "Dhawan", "Cricket", 444444.00)
+        );
+
+        Map<String, Employee> highestPaidEmployeeMap = employeeList.stream()
+                .collect(Collectors.groupingBy(
+                        Employee::department,
+                        HashMap::new, //Not mandatory
+                        Collectors.maxBy(Comparator.comparingDouble(Employee::salary))
+                        )
+                ).entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey(), //Map.Entry::getKey
+                        entry -> entry.getValue().orElse(null)
+                        )
+                );
+
+        //System.out.println("Highest paid employee by department wise : "+highestPaidEmployeeMap);
+        System.out.println("Highest paid employee by department wise : ");
+        highestPaidEmployeeMap.forEach((dept, emp) -> {
+            System.out.println(dept+", highest paid employee : "+emp.name()+", Salary: "+emp.salary());
+        });
+
+        Map<String, Employee> highestPaidEmployee1 = employeeList.stream()
+                .collect(Collectors.groupingBy(
+                        Employee :: department,
+                        Collectors.reducing((e1,e2) -> e1.salary() > e2.salary() ? e1 : e2)
+                        )
+                ).entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry :: getKey,
+                        entry -> entry.getValue().orElse(null)
+                ));
+
+        System.out.println("Highest paid employee department wise, using Reducing");
+        highestPaidEmployee1.forEach((dept, emp) -> {
+            if(emp !=null){
+                System.out.println(dept+", employee : "+emp.name()+", Rs. "+emp.salary());
+            }
+        });
+
+        Map<String, Employee> secondHighestPaidEmployeeMap = employeeList.stream()
+                .collect(Collectors.groupingBy(
+                        Employee :: department,
+                        Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                list -> {
+                                    if (list.size() < 2) return null;
+
+                                    list.sort((e1, e2) -> Double.compare(e2.salary(), e1.salary()));
+                                    return list.get(1); //Second highest
+                                }
+                        )
+                ));
+
+        System.out.println("Second Highest Paid Employee department wise : ");
+        secondHighestPaidEmployeeMap.forEach((dept, emp) -> {
+            System.out.println(dept+", Employee : "+emp.name()+", Rs. "+emp.salary());
+        });
+
+
+
+
 
 
 
