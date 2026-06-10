@@ -149,6 +149,81 @@ public class MainClassForExercises0004 {
             System.out.println(word+" repeated "+freq+" times");
         });
 
+        /*
+        Flattening Nested Collections: Given a list of Order objects, where each order contains a list of Item objects,
+        extract a distinct, sorted list of all item names across all orders using flatMap.
+        */
+
+        List<Order> orderList = Arrays.asList(
+                new Order(List.of(new Item("Mouse"), new Item("Keyboard"))),
+                new Order(List.of(new Item("Laptop"), new Item("Mobile"))),
+                new Order(List.of(new Item("Keyboard"), new Item("Laptop"))),
+                new Order(List.of(new Item("Pen"), new Item("Mouse")))
+        );
+
+        List<String> sortedDistinctItemsList = orderList.stream()
+                .flatMap(order -> order.getItemList().stream())
+                .map(item -> item.getItemName())
+                .distinct()
+                .sorted()
+                .toList();
+
+        System.out.println("sortedDistinctItemsList : "+sortedDistinctItemsList);
+
+        /*
+        Find the number which is repeated the same number of times
+        Given List : [12,13,2,2,3,5,4,4,4,4], Can you guess the output?
+        Output {2,4}
+        */
+
+        List<Integer> inputList = Arrays.asList(12,13,2,2,3,5,4,4,4,4);
+
+        Set<Integer> outputList = inputList.stream()
+                .collect(Collectors.groupingBy(
+                        num -> num,
+                        Collectors.counting()
+                )).entrySet().stream()
+                .filter(entry -> entry.getKey() == entry.getValue().intValue()) //Operator '==' cannot be applied to 'java.lang.Integer', 'java.lang.Long'
+                .map(Map.Entry :: getKey)
+                .collect(Collectors.toSet());
+
+        System.out.println("inputList : "+inputList);
+        System.out.println("outputList : "+outputList);
+
+
+        /*
+        Return the consecutive two numbers 2 peer. Output will be List<List>
+        Given list [1,2,4,5,7,8,9], Output {{1,2}, {4,5}, {7,8}, {8,9}}
+        */
+
+        List<Integer> inputList1 = Arrays.asList(1,2,4,5,7,8,9);
+        List<List<Integer>> outputList1 = IntStream.range(0, inputList1.size()-1)
+                .filter(i -> inputList1.get(i+1) == inputList1.get(i) +1)
+                .mapToObj(i -> Arrays.asList(inputList.get(i), inputList1.get(i+1)))
+                .toList();
+
+        System.out.println("outputList1 : "+outputList1);
+
+        /*
+        Print non-repeating first character. Consider any String. your wish.
+        */
+
+        String s1 = "aabbcddxxyyza";
+
+        s1.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        c -> c,
+                        Collectors.counting()
+                )).entrySet().stream()
+                .filter(entry -> entry.getValue() == 1)
+                .limit(1)
+                .map(entry -> entry.getKey())
+                .forEach(c -> System.out.println("First Non repeating character : "+c));
+
+
+
+
 
 
 
