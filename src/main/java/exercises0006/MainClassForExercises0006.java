@@ -243,6 +243,22 @@ public class MainClassForExercises0006 {
 
         });
 
+        /*
+        Custom String Joining: Given a list of strings, filter out empty strings,
+        convert them to uppercase, and join them with a comma separator enclosed in square brackets [A, B, C].
+        */
+
+        List<String> stringList = Arrays.asList(
+                "Sachin", "Shewag", "Gambhir", "Virat", "", "Yuvraj", null, "Dhoni", "   ", "Raina"
+        );
+
+        String joinedString = stringList.stream()
+                .filter(s -> Objects.nonNull(s) && !s.isBlank())
+                .map(String :: toUpperCase)
+                .collect(Collectors.joining(",", "[", "]"));
+
+        System.out.println("=".repeat(20));
+        System.out.println("Joined string : "+joinedString);
 
 
 
