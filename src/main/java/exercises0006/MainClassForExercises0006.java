@@ -2,6 +2,7 @@ package exercises0006;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class MainClassForExercises0006 {
 
@@ -312,6 +313,22 @@ public class MainClassForExercises0006 {
         System.out.println("=".repeat(20));
         System.out.println("integerList : "+integerList);
         System.out.println("outputList : "+outputList);
+
+        /*
+        Return the consecutive two numbers 2 peer. Output will be List<List>
+        Given list [1,2,4,5,7,8,9], Output {{1,2}, {4,5}, {7,8}, {8,9}}
+        */
+
+        List<Integer> integerList1 = List.of(1,2,4,5,7,8,9);
+        List<List<Integer>> outputList1 = IntStream.range(0, integerList1.size()-1)
+                .filter(i -> integerList1.get(i+1).equals( integerList1.get(i) + 1))
+                .mapToObj(i -> List.of(integerList1.get(i), integerList1.get(i+1)))
+                .toList();
+
+        System.out.println("=".repeat(20));
+        System.out.println("integerList1 : "+integerList1);
+        System.out.println("outputList1 : "+outputList1);
+
 
 
 
