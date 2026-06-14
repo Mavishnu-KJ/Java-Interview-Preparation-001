@@ -94,6 +94,50 @@ public class MainClassForExercises0006 {
         });
 
 
+        /*
+        Frequency Count: Given a string,
+        find the frequency of each character, and filter out the top 3 most frequent elements using Streams.
+        */
+
+        String str = "aaabbbbbbcccdddd";
+        Set<Character> mostFrequentCharacterList = str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        c -> c,
+                        Collectors.counting()
+                )).entrySet().stream()
+                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .map(entry -> entry.getKey())
+                .collect(Collectors.toSet());
+
+        System.out.println("Top 3 most frequent elements in the String "+str);
+        mostFrequentCharacterList.forEach(element -> System.out.println(element));
+
+        String str1 = "aaabbbbbbcccdddd";
+        Map<Character, Integer> frequencyMap = str1.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        c -> c,
+                        Collectors.counting()
+                )).entrySet().stream()
+                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .limit(3)
+                .collect(Collectors.toMap(
+                        Map.Entry :: getKey,
+                        entry -> entry.getValue().intValue(),
+                        (existing, duplicate) -> existing,
+                        LinkedHashMap :: new
+                ));
+
+        System.out.println("Top 3 most frequent elements in the String "+str);
+        frequencyMap.forEach((character, freq) -> {
+            System.out.println(character+" repeated "+freq+" times");
+        });
+
+
+
+
+
 
 
 
