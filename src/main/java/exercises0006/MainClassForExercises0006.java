@@ -260,7 +260,39 @@ public class MainClassForExercises0006 {
         System.out.println("=".repeat(20));
         System.out.println("Joined string : "+joinedString);
 
+        /*
+        Data Aggregation: Given a collection of complex Employee,
+        use Streams to sort them dynamically by department name first, and then by salary descending.
+        */
 
+        Map<String, List<Employee>> employeeListByDepartmentAscSalaryDesc = employeeList.stream()
+                .collect(Collectors.groupingBy(
+                        Employee :: department,
+                        TreeMap :: new,
+                        Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                list -> {
+                                    if(list == null || list.isEmpty()) return null;
+
+                                    list.sort((e1, e2) -> Double.compare(e2.salary(), e1.salary()));
+                                    return list;
+                                }
+                        )
+                ));
+
+        System.out.println("=".repeat(20));
+        System.out.println("employeeList before sorting : "+employeeList);
+        System.out.println("employeeList after sorting as per requirement : ");
+        employeeListByDepartmentAscSalaryDesc.forEach((dept, emp) -> {
+
+            System.out.println("-".repeat(10));
+            System.out.println(dept);
+            System.out.println("-".repeat(10));
+            emp.forEach(e -> System.out.println(e.name+"(Salary Rs. "+e.salary+" )"));
+            System.out.println("-".repeat(10));
+
+
+        });
 
 
     }
