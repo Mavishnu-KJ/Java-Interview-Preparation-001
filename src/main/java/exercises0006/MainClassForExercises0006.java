@@ -134,7 +134,35 @@ public class MainClassForExercises0006 {
             System.out.println(character+" repeated "+freq+" times");
         });
 
+        /*
+        Frequency Count: Given a list of words,
+        find the frequency of each word, and filter out the top 3 most frequent elements using Streams.
+        */
 
+        List<String> wordList = Arrays.asList(
+                "banana", "banana", "apple", "orange", "banana",
+                "banana", "orange", "banana", "apple", "orange"
+        );
+
+        Map<String, Long> mostFrequentWordMap = wordList.stream()
+                .collect(Collectors.groupingBy(
+                        s -> s,
+                        Collectors.counting()
+                )).entrySet().stream()
+                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .limit(3)
+                .collect(Collectors.toMap(
+                        Map.Entry :: getKey,
+                        Map.Entry :: getValue,
+                        (existing, duplicate) -> existing,
+                        LinkedHashMap :: new
+                ));
+
+        System.out.println("=".repeat(20));
+        System.out.println("Top 3 most frequent elements in the list of words : ");
+        mostFrequentWordMap.forEach((s, freq) -> {
+            System.out.println(s+" repeated "+freq+" times");
+        });
 
 
 
