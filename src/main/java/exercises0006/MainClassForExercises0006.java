@@ -14,6 +14,18 @@ public class MainClassForExercises0006 {
 
     }
 
+    public static record Item(
+            String itemName
+    ){
+
+    }
+
+    public static record Order(
+            List<Item> itemList
+    ){
+
+    }
+
     public static void main(String[] args){
 
         /*
@@ -163,6 +175,31 @@ public class MainClassForExercises0006 {
         mostFrequentWordMap.forEach((s, freq) -> {
             System.out.println(s+" repeated "+freq+" times");
         });
+
+        /*
+        Flattening Nested Collections: Given a list of Order objects, where each order contains a list of Item objects,
+        extract a distinct, sorted list of all item names across all orders using flatMap.
+        */
+
+        List<Order> orderList = List.of(
+                new Order(List.of(new Item("Keyboard"), new Item("Mouse"))),
+                new Order(List.of(new Item("Laptop"), new Item("Bag"))),
+                new Order(List.of(new Item("Keyboard"), new Item("Mobile"))),
+                new Order(List.of(new Item("Tab"), new Item("Mouse"))),
+                new Order(List.of(new Item("Pen")))
+        );
+
+        List<String> itemNameList = orderList.stream()
+                .flatMap(order -> order.itemList().stream())
+                .map(item -> item.itemName())
+                .distinct()
+                .sorted()
+                .toList();
+
+        System.out.println("=".repeat(20));
+        System.out.println("orderList before flattening : "+orderList);
+        System.out.println("\nFlattened the orderList and printing the distinct and sorted item names from the list : ");
+        itemNameList.forEach(System.out::println);
 
 
 
