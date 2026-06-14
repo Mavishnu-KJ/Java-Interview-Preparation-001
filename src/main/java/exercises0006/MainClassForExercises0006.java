@@ -349,8 +349,58 @@ public class MainClassForExercises0006 {
         System.out.println("=".repeat(20));
         System.out.println("nonRepeatingFirstCharacter in the String "+s1+" is "+nonRepeatingFirstCharacter);
 
+        /*
+        Binary Grouping: Take a number in binary form and count the groups of isolated 0s individually before a 1 appears
+        (e.g., Input: 0011000 → Output: groups of size 2 and 3).
+        */
+
+        /*
+        Time Complexity Explanation:
+        O(n) — String split and stream operations process each character linearly.
+        Space Complexity Explanation:
+        O(n) — For storing the resulting list of group sizes.
+        */
+
+        String binaryNumber = "0011000";
+        List<Integer> zeroGroups = Arrays.stream(binaryNumber.split("1+"))  // Split on one or more 1s
+                .filter(s -> !s.isEmpty())      // Remove empty strings
+                .map(String :: length)          // Get length of each zero group
+                .toList();
 
 
+
+        System.out.println("=".repeat(20));
+        System.out.println("binaryNumber : "+binaryNumber);
+        System.out.println("zeroGroups : "+zeroGroups);
+
+        /*
+        Merge Overlapping Intervals: Given a collection of intervals (e.g., [1,3], [2,6], [8,10]),
+        merge all overlapping intervals to output [1,6], [8,10]. (Tests sorting and custom collection logic).
+        */
+
+        int[][] intervals = {{1,3}, {2,6}, {8,10}, {15,18}, {9,11}};
+
+        List<List<Integer>> merged = Arrays.stream(intervals)
+                .sorted((a,b) -> Integer.compare(a[0], b[0]))
+                .collect(
+                        ArrayList::new,
+                        (mergedList, currentInterval) -> {
+                            //List<Integer> lastMerged = mergedList.get(mergedList.size()-1);
+                            if(mergedList.isEmpty() ||
+                                    mergedList.get(mergedList.size()-1).get(1) < currentInterval[0]){
+
+                                mergedList.add(new ArrayList<>(Arrays.asList(currentInterval[0], currentInterval[1])));
+                            }else{
+
+                                List<Integer> lastMerged = mergedList.get(mergedList.size()-1);
+                                lastMerged.set(1, Math.max(lastMerged.get(1), currentInterval[1]));
+                            }
+                        },
+                        (list1, list2) -> list1.addAll(list2)
+                );
+
+        System.out.println("Non Overlapping merged list : ");
+        merged.forEach(System.out::println);
 
 
 
