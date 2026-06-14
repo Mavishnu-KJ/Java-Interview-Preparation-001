@@ -26,6 +26,13 @@ public class MainClassForExercises0006 {
 
     }
 
+    public static record Transaction(
+            String transactionId,
+            Double amount
+    ){
+
+    }
+
     public static void main(String[] args){
 
         /*
@@ -201,6 +208,40 @@ public class MainClassForExercises0006 {
         System.out.println("\nFlattened the orderList and printing the distinct and sorted item names from the list : ");
         itemNameList.forEach(System.out::println);
 
+        /*
+        Partitioning Data: Given a list of transactions,
+        partition them into two groups (e.g., transactions above ₹50,000 and below) and
+        calculate the average transaction amount for each group simultaneously.
+        */
+
+        List<Transaction> transactionList = List.of(
+            new Transaction("10", 80000.0),
+            new Transaction("18", 60000.0),
+            new Transaction("7", 70000.0),
+            new Transaction("3", 40000.0),
+            new Transaction("1", 45000.0),
+            new Transaction("15", 20000.0)
+        );
+
+
+
+        Map<Boolean, Double> transactionMapPartitionedByAmount = transactionList.stream()
+                .collect(Collectors.partitioningBy(
+                        transaction -> transaction.amount > 50000.0,
+                        Collectors.averagingDouble(transaction -> transaction.amount())
+                ));
+
+        System.out.println("=".repeat(20));
+        System.out.println("given transactionList : "+transactionList);
+        transactionMapPartitionedByAmount.forEach((aboveCutOff, average) -> {
+
+            if(aboveCutOff){
+                System.out.println("In the given transactionList, for Group (above 50000), average is "+average);
+            }else{
+                System.out.println("In the given transactionList, for Group (below 50000), average is "+average);
+            }
+
+        });
 
 
 
