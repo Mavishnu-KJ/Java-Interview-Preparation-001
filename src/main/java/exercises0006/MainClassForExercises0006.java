@@ -294,6 +294,27 @@ public class MainClassForExercises0006 {
 
         });
 
+        /*
+        Find the number which is repeated the same number of times
+        Given List : [12,13,2,2,3,5,4,4,4,4], Can you guess the output?
+        Output {2,4}
+        */
+
+        List<Integer> integerList = List.of(12,13,2,2,3,5,4,4,4,4);
+        List<Integer> outputList = integerList.stream()
+                .collect(Collectors.groupingBy(
+                        num -> num,
+                        Collectors.counting()
+                )).entrySet().stream()
+                .filter(entry -> entry.getKey() == entry.getValue().longValue())
+                .map(entry -> entry.getKey())
+                .toList();
+        System.out.println("=".repeat(20));
+        System.out.println("integerList : "+integerList);
+        System.out.println("outputList : "+outputList);
+
+
+
 
     }
 
