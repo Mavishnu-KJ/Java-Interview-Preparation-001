@@ -329,6 +329,27 @@ public class MainClassForExercises0006 {
         System.out.println("integerList1 : "+integerList1);
         System.out.println("outputList1 : "+outputList1);
 
+        /*
+        Print non-repeating first character. Consider any String. your wish.
+        */
+
+        String s1 = "aabbcddxxyyza";
+        Character nonRepeatingFirstCharacter = s1.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        c -> c,
+                        LinkedHashMap::new,
+                        Collectors.counting()
+                )).entrySet().stream()
+                .filter(entry -> entry.getValue() == 1)
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(null);
+
+        System.out.println("=".repeat(20));
+        System.out.println("nonRepeatingFirstCharacter in the String "+s1+" is "+nonRepeatingFirstCharacter);
+
+
 
 
 
