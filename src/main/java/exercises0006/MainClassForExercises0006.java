@@ -54,9 +54,9 @@ public class MainClassForExercises0006 {
         //Highest paid employee
         Map<String, Employee> employeeMap = employeeList.stream()
                 .collect(Collectors.groupingBy(
-                        Employee :: department, // grouped by department
-                        Collectors.maxBy(Comparator.comparingDouble(Employee :: salary)) // Employee sorted by salary descending, one max employee only
-                )// HashMap : Key : department, Value -> Optional<Employee>
+                                Employee :: department, // grouped by department
+                                Collectors.maxBy(Comparator.comparingDouble(Employee :: salary)) // Employee sorted by salary descending, one max employee only
+                        )// HashMap : Key : department, Value -> Optional<Employee>
                 ).entrySet().stream() //converting Map into stream for further processing
                 .collect(Collectors.toMap( //Iterating the map
                         Map.Entry :: getKey, // Department as key
@@ -65,7 +65,7 @@ public class MainClassForExercises0006 {
 
         System.out.println("Highest paid employee department wise : ");
         employeeMap.forEach((dept, emp) -> {
-           System.out.println(dept+"  - Highest Paid Employee : "+emp.name+" (Salary : Rs. "+emp.salary+" )");
+            System.out.println(dept+"  - Highest Paid Employee : "+emp.name+" (Salary : Rs. "+emp.salary+" )");
         });
 
         //Highest paid employee using Collectors.reducing
@@ -216,12 +216,12 @@ public class MainClassForExercises0006 {
         */
 
         List<Transaction> transactionList = List.of(
-            new Transaction("10", 80000.0),
-            new Transaction("18", 60000.0),
-            new Transaction("7", 70000.0),
-            new Transaction("3", 40000.0),
-            new Transaction("1", 45000.0),
-            new Transaction("15", 20000.0)
+                new Transaction("10", 80000.0),
+                new Transaction("18", 60000.0),
+                new Transaction("7", 70000.0),
+                new Transaction("3", 40000.0),
+                new Transaction("1", 45000.0),
+                new Transaction("15", 20000.0)
         );
 
 
