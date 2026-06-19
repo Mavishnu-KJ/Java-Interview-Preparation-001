@@ -75,6 +75,63 @@ public class MainClassForExercises0008 {
         });
 
 
+         /*
+        Frequency Count: Given a string,
+        find the frequency of each character, and filter out the top 3 most frequent elements using Streams.
+        */
+
+        String str = "aaabbbbbbcccdddd";
+        Map<Character, Integer> top3MostFrequentElements = str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        c -> c,
+                        Collectors.counting()
+                )).entrySet().stream()
+                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .limit(3)
+                .collect(Collectors.toMap(
+                        Map.Entry :: getKey,
+                        entry -> entry.getValue().intValue(),
+                        (existing, duplicate) -> existing,
+                        LinkedHashMap :: new
+                ));
+
+        System.out.println("=".repeat(20));
+        System.out.println("top 3 most frequent elements using Streams : ");
+        top3MostFrequentElements.forEach((character, frequency) -> {
+            System.out.println(character + "-> "+frequency+" times repeated");
+        });
+
+        /*
+        Frequency Count: Given a list of words,
+        find the frequency of each word, and filter out the top 3 most frequent elements using Streams.
+        */
+
+        List<String> wordList = Arrays.asList(
+                "banana", "banana", "apple", "orange", "banana",
+                "banana", "orange", "banana", "apple", "orange"
+        );
+
+        Map<String, Integer> top3MostFrequentElements1 = wordList.stream()
+                .collect(Collectors.groupingBy(
+                        s -> s,
+                        Collectors.counting()
+                )).entrySet().stream()
+                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .limit(3)
+                .collect(Collectors.toMap(
+                        Map.Entry :: getKey,
+                        entry -> entry.getValue().intValue(),
+                        (existing, duplicate) -> existing,
+                        LinkedHashMap :: new
+                ));
+
+        System.out.println("=".repeat(20));
+        System.out.println("top 3 most frequent elements using Streams : ");
+        top3MostFrequentElements1.forEach((word, freq) -> {
+            System.out.println(word + "-> "+freq+" times repeated");
+        });
+
     }
 
 }
