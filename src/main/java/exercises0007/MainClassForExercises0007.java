@@ -26,7 +26,7 @@ public class MainClassForExercises0007 {
             }
 
         }
-
+        System.out.println("String List : "+stringList);
         System.out.println("Reverse order : "+Arrays.toString(stringArray));
 
 
