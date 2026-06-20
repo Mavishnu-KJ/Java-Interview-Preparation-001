@@ -1,9 +1,6 @@
 package exercises0009;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MainClassForExercises0008 {
@@ -11,8 +8,8 @@ public class MainClassForExercises0008 {
     public static void main(String[] args){
         //System.out.println("Test MainClassForExercises0008");
 
-        //aaadddffffhhhhdddddaaagggg
-        //output outputString a3d3f3h4d4a3g4
+        //input : aaadddffffhhhhdddddaaagggg
+        //output : a3d3f3h4d4a3g4
 
         String inputString = "aaadddffffhhhhdddddaaagggg";
 
@@ -20,6 +17,7 @@ public class MainClassForExercises0008 {
                 .mapToObj(c -> (char) c)
                 .collect(Collectors.groupingBy(
                         c -> c,
+                        LinkedHashMap::new,
                         Collectors.counting()
                 )).entrySet().stream()
                 .collect(Collectors.toMap(
@@ -37,8 +35,10 @@ public class MainClassForExercises0008 {
 
         /*
 
-        this is my life -> siht si my efil
+        input : this is my life
+        output : siht si my efil
 
+        Explanation : you need to reverse the word only if it has vowels(a, e, i, o, u)
         */
 
         String sentence = "this is my life";
@@ -49,9 +49,9 @@ public class MainClassForExercises0008 {
                 )
                 .map(s -> {
                     if(s.contains("a") || s.contains("e") || s.contains("i") || s.contains("o") || s.contains("u")){
-                        char[] tempArray = s.toCharArray();
-                        //return reversed String
-                        return s;
+                        //char[] tempArray = s.toCharArray();
+                        //return s; //return reversed String, dont know this at this moment
+                        return new StringBuilder(s).reverse().toString();
                     }else{
                         return s;
                     }
