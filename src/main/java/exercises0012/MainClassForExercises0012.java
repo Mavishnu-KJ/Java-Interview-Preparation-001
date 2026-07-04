@@ -52,12 +52,52 @@ public class MainClassForExercises0012 {
         );
 
         //Highest paid employee
+        Map<String, Employee> highestPaidEmployee = employeeList.stream()
+                .collect(Collectors.groupingBy(
+                        Employee :: department,
+                        Collectors.maxBy(Comparator.comparingDouble(Employee::salary))
+                )).entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry :: getKey,
+                        entry -> entry.getValue().orElse(null)
+                ));
+
+        System.out.println("highest paid employee : "+highestPaidEmployee);
+        System.out.println("=".repeat(20));
+
+
 
 
         //Highest paid employee using Collectors.reducing
 
 
         //Second highest paid employee
+        Map<String, Employee> secondHighestPaidEmployee = employeeList.stream()
+                .collect(Collectors.groupingBy(
+                        Employee :: department,
+                        Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                list -> {
+                                    if(list.size() <2) return null;
+
+                                    list.sort((e1, e2) -> Double.compare(e2.salary(), e1.salary()));
+                                    return list.get(1);
+                                }
+                        )
+                )).entrySet().stream()
+                .filter(entry -> entry.getValue() != null)
+                .collect(Collectors.toMap(
+                        Map.Entry :: getKey,
+                        Map.Entry :: getValue
+                ));
+
+        System.out.println("=".repeat(20));
+        System.out.println("Second highest paid employee department wise using Collectors.reducing : ");
+        secondHighestPaidEmployee.forEach((dept, emp) -> {
+            if(emp != null) {
+                System.out.println(dept + " - Second highest Paid Employee : " + emp.name + " (Salary : Rs. " + emp.salary + " )");
+            }
+        });
 
 
         /*
@@ -66,6 +106,19 @@ public class MainClassForExercises0012 {
         */
 
         String str = "aaabbbbbbcccdddd";
+        List<Character> top3MostFrequentCharacterList = str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        c -> c,
+                        Collectors.counting()
+                )).entrySet().stream()
+                .sorted((e2,e1) -> Long.compare(e2.getValue(), e1.getValue()))
+                .limit(3)
+                .map(Map.Entry :: getKey)
+                .toList();
+
+        System.out.println("=".repeat(20));
+        System.out.println("top3MostFrequentCharacterList : "+top3MostFrequentCharacterList);
 
 
         String str1 = "aaabbbbbbcccdddd";
@@ -95,6 +148,15 @@ public class MainClassForExercises0012 {
                 new Order(List.of(new Item("Tab"), new Item("Mouse"))),
                 new Order(List.of(new Item("Pen")))
         );
+
+        List<String> itemNameList = orderList.stream()
+                .flatMap(order -> order.itemList().stream())
+                .map(item -> item.itemName())
+                .distinct()
+                .toList();
+
+        System.out.println("=".repeat(20));
+        System.out.println("itemNameList : "+itemNameList);
 
 
         /*
@@ -154,6 +216,17 @@ public class MainClassForExercises0012 {
         (e.g., Input: 0011000 → Output: groups of size 2 and 3).
         */
 
+        String binaryNumber = "0011000";
+
+        List<Integer> zeroGroups = Arrays.stream(binaryNumber.split("1+"))
+                .filter(s -> !s.isEmpty())
+                .map(String :: length)
+                .toList();
+
+        System.out.println("=".repeat(20));
+        System.out.println("binaryNumber : "+binaryNumber);
+        System.out.println("zeroGroups : "+zeroGroups);
+
         /*
         Time Complexity Explanation:
         O(n) — String split and stream operations process each character linearly.
@@ -161,13 +234,40 @@ public class MainClassForExercises0012 {
         O(n) — For storing the resulting list of group sizes.
         */
 
-        String binaryNumber = "0011000";
+        //String binaryNumber = "0011000";
 
 
         /*
         Merge Overlapping Intervals: Given a collection of intervals (e.g., [1,3], [2,6], [8,10]),
         merge all overlapping intervals to output [1,6], [8,10]. (Tests sorting and custom collection logic).
         */
+
+        int[][] intervals = {{1,3}, {2,6}, {8,10}, {15,18}, {9,11}};
+
+        List<List<Integer>> merged = Arrays.stream(intervals)
+                .sorted((a,b) -> Integer.compare(a[0], b[0]))
+                .collect(
+                        ArrayList :: new,
+                        (mergedList, currentInterval) -> {
+
+                            //List<Integer> lastMerged = mergedList.get(mergedList.size()-1);
+                            if (mergedList.isEmpty() ||
+                                    mergedList.get(mergedList.size() - 1).get(1) < currentInterval[0]) {
+
+                                mergedList.add(new ArrayList<>(Arrays.asList(currentInterval[0], currentInterval[1])));
+
+                            } else {
+                                List<Integer> lastMerged = mergedList.get(mergedList.size() - 1);
+                                lastMerged.set(1, Math.max(lastMerged.get(1), currentInterval[1]));
+                            }
+                        },
+                        (list1, list2) -> list1.addAll(list2)
+
+                );
+
+        System.out.println("Non Overlapping merged list : ");
+        merged.forEach(System.out::println);
+
 
 
 
